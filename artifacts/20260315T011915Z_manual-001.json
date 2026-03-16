@@ -1,0 +1,1053 @@
+{
+  "issue_id": "manual-001",
+  "title": "Common problems with McLeod TMS onboarding",
+  "model": "sonar-deep-research",
+  "usage": {
+    "prompt_tokens": 532,
+    "completion_tokens": 4608,
+    "total_tokens": 5140,
+    "citation_tokens": 38159,
+    "num_search_queries": 54,
+    "reasoning_tokens": 271817,
+    "cost": {
+      "input_tokens_cost": 0.00106,
+      "output_tokens_cost": 0.03686,
+      "citation_tokens_cost": 0.07632,
+      "reasoning_tokens_cost": 0.81545,
+      "search_queries_cost": 0.27,
+      "total_cost": 1.1997
+    }
+  },
+  "citations": [
+    "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+    "https://www.ttnews.com/articles/mcleod-ai-capabilities-2024",
+    "https://www.mcleodsoftware.com",
+    "https://www.youtube.com/watch?v=VtSuXJYkYA4",
+    "https://community.spiceworks.com/t/looking-for-knowledgeable-person-to-help-with-mcleod-software-server-migration/690298",
+    "https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2",
+    "https://www.mcleodsoftware.com/why-mcleod/insights/",
+    "https://www.truckinginfo.com/news/mcleod-software-says-bankrupt-mcleod-no-connection",
+    "https://www.datatruck.io/data-migration",
+    "https://www.isaacinstruments.com/blog/best-practices/isaac-and-mcleod-integration/",
+    "https://optimaldynamics.com/resource/recapping-our-time-at-the-mcleod-software-user-conference-ai-change-management-and-building-connections",
+    "https://www.mcleodsoftware.com/why-mcleod/our-process/",
+    "https://support.techship.io/support/solutions/articles/263384-mcleod-onboarding-requirements-information-",
+    "https://www.scribd.com/document/276969384/TMS-Error-Troubleshooting",
+    "https://www.mcleodsoftware.com/why-mcleod/resources/press-releases/mcleod-software-announces-partnership-updates-with-24-2-tms-upgrade/",
+    "https://www.capterra.com/p/16847/LoadMaster/reviews/",
+    "https://www.mcleodsoftware.com/why-mcleod/resources/press-releases/mcleod-software-launches-new-release-advancing-smarter-operations-faster-decisions-financial-clarity/",
+    "https://www.youtube.com/watch?v=_kQWYP5PwDw",
+    "https://www.youtube.com/watch?v=Qr7XaFix0Ds",
+    "https://community.spiceworks.com/t/lagging-and-slow-on-virtual-servers/203004",
+    "https://www.mcleodsoftware.com/solutions/carrier-management/",
+    "https://pubmed.ncbi.nlm.nih.gov/15203529/",
+    "https://www.mcleodsoftware.com/who-we-serve/truckload-carriers/",
+    "https://www.youtube.com/watch?v=LolfBut7_zs",
+    "https://angusmcleod.com/mcleod-management-model/",
+    "https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid",
+    "https://www.mcleodsoftware.com/who-we-serve/private-fleets/",
+    "https://www.freightwaves.com/news/technology-mcleod-clients-discuss-order-lane-profitability-analysis-tools",
+    "https://kb.samsara.com/hc/en-us/articles/360049126291-Integrate-with-McLeod-DocumentPower",
+    "https://tetrate.io/learn/ai/mcp/implementation-best-practices",
+    "https://lead.devclarity.ai/case-studies/mcleod",
+    "https://www.mcleodsoftware.com/solutions/pricing-order-management/",
+    "https://ninjadispatch.com/2025/05/30/mcleod-trained-dispatchers/",
+    "https://www.ziprecruiter.com/co/Mcleod-Software/Jobs/Implementation-Consultant",
+    "https://docs.rtafleet.com/rta-manual/load-master-interface/setting-up-load-master",
+    "https://pubmed.ncbi.nlm.nih.gov/22111695/",
+    "https://www.velosio.com/blog/go-live-effective-planning-and-cutover-controls/"
+  ],
+  "content": "# Common Problems with McLeod TMS Onboarding: Causes and Mitigation Strategies\n\n## Executive Summary\n\nMcLeod TMS onboarding encounters persistent challenges spanning technical infrastructure, user training complexity, IT support gaps, and implementation coordination costs that extend well beyond the core system deployment[1][1][1]. Organizations implementing McLeod systems face substantial organizational and technical hurdles, including the need for extensive specialist training, supplemental IT support beyond the vendor's scope, and significant expenditures on consulting services that can strain mid-market and small operator budgets[5][12][33]. Effective mitigation requires comprehensive change management planning, adequate resource allocation, vendor partnership coordination, and realistic timeline expectations aligned with the complexity of transportation management transformation[26].\n\n## Key Findings\n\n1. **Fragmented Support Responsibility Creates Operational Gaps**: McLeod users encounter significant challenges with information technology problems that fall outside the TMS platform itself, including network security, system integration management, and device uptime assurance[1][1][1][1]. The vendor's scope of support focuses narrowly on the LoadMaster and PowerBroker applications themselves, leaving carriers and brokers responsible for the broader infrastructure ecosystem without adequate guidance or resources to manage the interconnected systems that enable day-to-day operations[1][1]. This fragmentation frequently becomes a major roadblock during the critical onboarding phase when fleets are attempting to stabilize new workflows while simultaneously managing external system dependencies[1][1].\n\n2. **Steep Learning Curve and Extended Ramp-Up Period**: The McLeod user interface demands significant investment of time for operators to achieve proficiency, with new dispatcher hires requiring weeks to months of training depending on the specific modules and workflows implemented within their organization[33]. User experience reviews consistently cite the interface as complex and non-intuitive, creating barriers to adoption that extend beyond the formal training period[16]. Getting a new in-house dispatcher up to speed on McLeod's interface can require thousands of dollars in training costs through boot camps and on-site sessions at McLeod's Birmingham headquarters, not including travel and lodging expenses[33].\n\n3. **High Implementation Consulting Costs Create Budget Constraints**: Organizations implementing McLeod systems face substantial consulting fees that scale with fleet size and database complexity, with vendors quoting prices justified only for larger operations despite the complexity applying equally to smaller fleets[5][5]. The costs are structured with advance payment requirements and \"credit\" arrangements for unbilled hours, creating cash flow uncertainty for mid-market carriers[5]. Small owner-operators and smaller fleets often find that the cost of professional migration services makes them prohibitive, forcing companies to pursue budget alternatives using older server hardware and operating systems rather than upgrading infrastructure as recommended[5].\n\n4. **Complex Integration Requirements Demand Specialized Technical Expertise**: Integrating McLeod with telematics systems, accounting software, maintenance management platforms, and other critical business applications requires detailed configuration, scripting, and ongoing automation setup that extends far beyond standard implementation[6][6][35]. The integration process involves multiple phases including customer discovery, PowerShell script preparation, directory configuration, facility setup, and scheduled task automation, each requiring coordination between vendor support, customer IT teams, and third-party system providers[6][6][35]. Configuration errors or incomplete setup of these integrations directly undermine the value of the TMS investment and can persist for months if not properly validated and tested[6][6][35].\n\n5. **Organizational Change Management Receives Insufficient Planning Attention**: Many TMS implementations fail to allocate adequate resources to change management activities including process documentation, stakeholder alignment, and adoption strategy development before the system goes live[26]. The complexity and organizational impact of a TMS implementation are frequently underestimated during the planning phase, resulting in insufficient human capital, unrealistic timelines, and corner-cutting that creates problems during deployment and after go-live[26]. Effective implementation requires visible executive ownership, dedicated project leadership, cross-departmental resource allocation, and structured testing and training plans that are often deprioritized in favor of accelerated deployment schedules[26].\n\n## Supporting Detail\n\n### Finding 1: Fragmented Support Responsibility Creates Operational Gaps\n\nThe architecture of McLeod support coverage creates a persistent source of frustration for carriers and brokers attempting to operate complex logistics operations. McLeod's responsibility boundaries encompass the LoadMaster and PowerBroker applications themselves, but the surrounding infrastructure that enables these systems to function\u2014networks, security, device management, system integration, and uptime across multiple platforms\u2014falls outside the vendor's direct support scope[1][1]. Users report that they must handle day-to-day IT problems including keeping networks secure and reliable, managing integrations and automations beyond the TMS, and ensuring uptime across systems and devices, challenges that require supplemental specialized support beyond what McLeod provides[1][1][1].\n\nWithout this supplemental support infrastructure in place, these challenges typically become major roadblocks that can halt operations[1][1]. During onboarding specifically, when organizations are simultaneously implementing new business processes, training staff on new systems, and attempting to stabilize production environments, the gap between what the vendor supports and what the organization must manage becomes particularly acute. Carriers and brokers cannot afford significant downtime or integration failures during this period, yet lack clear guidance or resources from McLeod for managing these broader IT challenges[1][1][1].\n\nThe mitigation strategy must involve securing supplemental IT support that bridges this gap. Organizations should identify whether they have in-house IT expertise sufficient to manage the integration and infrastructure requirements, or whether they need to engage third-party IT support partners who specialize in transportation industry systems. This decision should be made during the planning phase\u2014before implementation begins\u2014rather than discovered during the crisis of onboarding when alternatives are limited and expensive.\n\n### Finding 2: Steep Learning Curve and Extended Ramp-Up Period\n\nMcLeod's complexity as a transportation management system creates substantial training requirements that most organizations underestimate during planning. User reviews consistently describe the software as \"very complex,\" \"not user friendly,\" and requiring \"high level of expertise\" to operate effectively[16]. The interface is described as \"outdated\" and \"difficult to use,\" and it took experienced users \"over a month to understand\" the system despite acknowledging that it contains helpful features[16]. This gap between functionality and usability directly translates to extended onboarding timelines.\n\nFor dispatcher hiring specifically, the learning curve becomes an operational constraint. New dispatchers require weeks to months to achieve proficiency depending on the complexity of the organization's specific workflows, load types, and customer requirements[33]. During this ramp-up period, the new dispatcher is not operating at full productivity, meaning either other staff must cover workload or customer service suffers. The training itself carries direct costs: McLeod offers boot camps and on-site training sessions at its Birmingham headquarters that cost thousands per employee, plus travel and lodging expenses[33]. If staff must be relieved from operations duties to attend training, the cost multiplies further.\n\nBeyond formal training provided by McLeod, organizations discover that much of the learning happens through operational experience and peer knowledge-sharing. Users report that talking with other staff was the most effective action in dealing with system complexities and recovery from errors[16]. This means that successful onboarding depends not just on formal training but on creating space for experienced operators to mentor new ones\u2014a resource investment that many organizations fail to plan for adequately.\n\nMitigation strategies should include several complementary approaches. First, organizations should budget for longer ramp-up periods than their initial estimates suggest, accounting for the documented complexity. Second, they should invest in comprehensive training that goes beyond the basic operator level to include power-user and administrator training for key staff. McLeod provides classroom training on a weekly basis at their Birmingham headquarters, live remote training classes, on-site training, and specialized one-on-one training opportunities[12][12]. Third, organizations should plan for peer mentoring infrastructure where experienced operators have dedicated time to share knowledge and troubleshoot with new team members. Fourth, organizations should consider hiring or contracting with McLeod-trained dispatchers who are already proficient with the system rather than building expertise from scratch, trading upfront hiring costs against extended ramp-up periods[33].\n\n### Finding 3: High Implementation Consulting Costs Create Budget Constraints\n\nThe economics of McLeod implementation create particular hardship for mid-market and smaller carriers. Implementation consulting costs are structured with minimum pricing tiers that do not scale proportionally with fleet size. One organization managing a 40-truck fleet with a 5GB database sought migration assistance from McLeod and received quotes that \"a price justifiable only for a 25 user+ system and a 50GB db,\" requiring advance payment with unbilled hours credited to the account against future work[5]. This pricing structure essentially subsidizes larger implementations while penalizing smaller fleets that lack economies of scale.\n\nThe consequence is that many smaller organizations choose to manage migration and upgrades using budget alternatives. Rather than implementing McLeod's recommended approach of upgrading to current operating systems and SQL Server versions, organizations opt to run older hardware and legacy operating systems acquired at substantially discounted prices\u2014sometimes at 60% less cost than new equipment[5]. While this decision preserves capital in the short term, it often creates technical debt and support challenges in the longer term. Organizations operating older infrastructure find they cannot upgrade McLeod versions, cannot easily integrate newer systems, and create maintenance burdens that consume resources throughout the implementation and operational phases.\n\nThe core issue is not that implementation is expensive\u2014it is that the expense structure does not accommodate the full range of the market McLeod serves. Smaller fleets and owner-operators face implementation costs that represent a larger percentage of their annual IT budgets, making it necessary to find workarounds rather than follow vendor-recommended approaches.\n\nMitigation strategies should begin with comprehensive cost modeling during the selection and planning phase. Organizations should engage McLeod directly to understand all potential consulting costs, not just the initial implementation but also integration, training, and infrastructure requirements. They should explore whether partnership with other smaller organizations might create sufficient scale to negotiate better consulting pricing. They should evaluate whether transitioning to a different TMS might better fit their budget constraints, considering that McLeod pricing is structured for mid-market and larger carriers. If McLeod is the correct choice despite consulting costs, organizations should prioritize hiring or contracting with implementation partners who specialize in McLeod systems, as independent consultants often have more flexible pricing structures than the vendor itself[33][34].\n\n### Finding 4: Complex Integration Requirements Demand Specialized Technical Expertise\n\nMcLeod onboarding is not a standalone TMS deployment but rather the integration of the TMS into a complex ecosystem of other systems that carriers and brokers depend on: telematics platforms, electronic logbook systems, maintenance management systems, document imaging, accounting software, and market data sources. Each of these integrations requires detailed technical configuration that goes far beyond turning on a checkbox.\n\nThe integration process for McLeod with third-party systems like RTA Fleet Management Software illustrates the complexity. Implementation requires five distinct phases: initial customer setup and discovery involving multiple stakeholders, LoadMaster configuration and file preparation including PowerShell script customization, RTA system configuration through SAU and facility maintenance, CSM and customer task coordination ensuring data alignment, and finally automation of the integration process through VisualCron scheduling[6][6][35]. Each phase involves technical tasks that require specialized knowledge\u2014understanding PowerShell scripting, SQL database management, WinSCP file transfer protocols, and VisualCron job scheduling. Configuration errors at any phase can undermine the entire integration.\n\nDuring the discovery phase itself, teams must identify which specific integration utilities are needed and should be enabled, make decisions about GL code mapping, confirm customer and vendor abbreviations match between systems, and establish which data elements flow in which directions[6][6][35]. Many organizations discover during implementation that their data architecture does not support the integrations they assumed would work, requiring re-engineering of their data processes. The integration guide for McLeod and RTA systems is a 52+ page technical document that walks Tier 2 support specialists through these requirements\u2014it is not something non-technical staff can execute without guidance[6][6][35].\n\nValidation and testing of integrations must occur before production deployment, but many organizations defer this work to the final implementation phase when timelines are tight and resources are stretched. The result is that integrations go live incompletely tested, creating data quality and visibility problems that persist for months[6][6][35].\n\nMitigation strategies must address integration complexity as a primary implementation workstream, not a secondary consideration. During the planning phase, organizations should map all systems that need to integrate with McLeod and identify the integration methods and requirements for each. They should allocate dedicated technical resources\u2014either in-house IT staff with the necessary expertise or external consultants\u2014to manage integration configuration and testing. They should establish data governance and validation processes that ensure data flowing between systems is accurate and complete. They should conduct full end-to-end testing of each integration before going live, not after. They should document integration configurations and workflows so that when staff changes occur, the knowledge is not lost. They should establish ongoing integration monitoring and maintenance processes to catch failures early rather than discovering problems in production.\n\n### Finding 5: Organizational Change Management Receives Insufficient Planning Attention\n\nResearch on general TMS implementation best practices identifies organizational change management as a critical success factor, yet it is frequently underestimated during McLeod onboarding planning[26]. Organizations often focus implementation planning on system configuration, data migration, and technical testing while giving minimal attention to the organizational transformation required to successfully adopt new business processes and systems[26].\n\nThe root causes of inadequate change management planning are widespread. First, organizations often fail to recognize the full complexity and organizational impact that a TMS implementation represents[26]. McLeod is not simply a replacement for an older version of itself or a parallel tool\u2014it fundamentally changes how dispatching, pricing, driver communication, customer management, and financial settlement are performed. This organizational impact is underestimated or dismissed as a non-technical problem.\n\nSecond, without adequate recognition of scope and impact, organizations fail to allocate sufficient resources to change management activities[26]. There is no dedicated project lead who is 100% committed to the implementation\u2014this responsibility is added to someone's existing job. There is no cross-departmental resource allocation ensuring that operations, dispatch, accounting, and customer service staff have time to participate in process redesign and testing. There is no executive sponsor providing visible support and unblocking organizational obstacles. Without these resources, the change management dimension of implementation simply does not happen.\n\nThird, many organizations fail to document and compare current processes versus the new processes that McLeod will enable[26]. This gap in process documentation means that during implementation, staff are attempting to learn new workflows without clear understanding of how their current work will change. They are making errors that reflect different process assumptions. Customer and shipper relationships are disrupted by changes in how orders are processed, how visibility is provided, and how problems are resolved.\n\nThe consequences of inadequate change management are substantial: slower adoption, higher error rates during and after go-live, staff frustration and turnover, and customer service disruptions[26]. These operational problems create pressure to declare the implementation a failure and consider reverting to prior systems or processes, even when the technical implementation was executed correctly.\n\nMitigation requires creating explicit change management discipline during the planning phase. The implementation plan should start not when the system is beginning to move through configuration, but when the idea of bringing a new TMS is first brought to the table[26]. The plan should include stakeholder engagement to understand which staff, customers, and partners will be affected. It should design a general timetable that reserves time for process mapping, process redesign, and testing beyond the initial system configuration phase. It should assign a dedicated project leader with authority to make decisions and unblock obstacles. It should assemble a detailed requirements document that describes what the organization is trying to accomplish, not just what the software can do. It should map current processes step-by-step, then map the new processes McLeod will enable, and explicitly compare the two to identify where work flows will change[26].\n\nFor McLeod specifically, change management should address the known user experience challenges. Users need comprehensive training that accounts for the steep learning curve documented in Capterra reviews. Experienced operators need time to practice with the system before going live in production. Process designers need to simplify McLeod's complex workflows down to the specific steps the organization will actually use, rather than attempting to use all capabilities. Managers need to understand how their role and decision-making will change with better data availability. Customer-facing staff need to understand what new capabilities or visibility they will be able to offer customers[16][26]. This level of change preparation does not happen by default\u2014it requires deliberate planning and resource commitment.\n\n## Gaps & Uncertainty\n\nThe available sources provide clear evidence of specific problems that occur during McLeod onboarding and general TMS implementation best practices, but several important gaps remain:\n\n**Quantification of Incidence**: While the sources describe problems that McLeod users encounter (IT support gaps, training time requirements, integration complexity, cost overruns), none of the sources provide quantitative data on how frequently these problems occur across the McLeod user base, what percentage of implementations experience significant delays or cost overruns, or how long typical implementations take versus planned timelines. The research is anecdotal and case-based rather than statistically representative.\n\n**Root Cause Attribution**: Sources document that problems occur but rarely isolate whether problems stem from inadequate McLeod vendor support, inadequate customer organization planning and resources, incompatibility between McLeod and the customer's existing systems, external factors such as COVID or supply chain disruption, or combinations of these factors. Without clear root cause data, mitigation recommendations must remain general rather than specifically targeted.\n\n**Vendor Accountability**: The sources do not clearly attribute responsibility for common problems to McLeod's product design, McLeod's implementation and support services, or customer organizations' execution. It is unclear from the available sources whether McLeod has made improvements to its implementation methodology or training approaches in response to documented user experience problems. One source references McLeod's new version 26.1 released March 2026 includes improved user interface and workflow design, but does not compare this to previous versions to assess whether it addresses documented usability concerns.\n\n**Financial Impact Quantification**: While sources reference implementation costs and training expenses, none provide comprehensive financial models showing the total cost of ownership for an implementation\u2014including consulting, training, integration, opportunity costs from delayed go-live, and post-go-live remediation. This makes it difficult for organizations to assess whether problems are normal overhead or indicators of implementing the wrong system.\n\n**Comparison to Alternatives**: The sources do not compare McLeod's onboarding complexity, cost, or support gaps to competing TMS platforms. Without competitive comparison, it is unclear whether McLeod's challenges are industry-wide TMS implementation problems or specific to McLeod's approach and architecture.\n\n**Success Metrics for Mitigation**: While the research identifies mitigation strategies, the sources do not provide data on which mitigation approaches are most effective, what implementation timelines result from different mitigation strategies, or how to prioritize mitigation efforts when resources are constrained.\n\n**Post-Go-Live Experience**: The sources focus heavily on the implementation and onboarding period but provide limited documentation of whether problems identified during onboarding persist after go-live or whether they are resolved once the system reaches steady-state operations.\n\n---\n\n## Sources\n\n[1] https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/ \u2013 The Hidden Gap for McLeod Users: IT Support Beyond the TMS\n\n[2] https://www.ttnews.com/articles/mcleod-ai-capabilities-2024 \u2013 McLeod Previews AI Capabilities Amid Freight Rate Challenges\n\n[5] https://community.spiceworks.com/t/looking-for-knowledgeable-person-to-help-with-mcleod-software-server-migration/690298 \u2013 Looking for knowledgeable person to help with McLeod software server migration\n\n[6] https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2 \u2013 McLeod (LoadMaster) Integration Guide for Tier 2\n\n[5] https://community.spiceworks.com/t/looking-for-knowledgeable-person-to-help-with-mcleod-software-server-migration/690298 \u2013 Looking for knowledgeable person to help with McLeod software server migration (server infrastructure discussion)\n\n[12] https://www.mcleodsoftware.com/why-mcleod/our-process/ \u2013 Our Process | McLeod Software\n\n[1] https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/ \u2013 The Hidden Gap for McLeod Users: IT Support Beyond the TMS\n\n[1] https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/ \u2013 The Hidden Gap for McLeod Users: IT Support Beyond the TMS\n\n[16] https://www.capterra.com/p/16847/LoadMaster/reviews/ \u2013 LoadMaster Reviews 2026. Verified Reviews, Pros & Cons | Capterra\n\n[17] https://www.mcleodsoftware.com/why-mcleod/resources/press-releases/mcleod-software-launches-new-release-advancing-smarter-operations-faster-decisions-financial-clarity/ \u2013 McLeod Software Launches New Release: Advancing Smarter Operations, Faster Decisions, Financial Clarity\n\n[12] https://www.mcleodsoftware.com/why-mcleod/our-process/ \u2013 Our Process | McLeod Software\n\n[6] https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2 \u2013 McLeod (LoadMaster) Integration Guide for Tier 2\n\n[26] https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid \u2013 Top 10 Transportation Management Software TMS Implementation Pitfalls to Avoid\n\n[1] https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/ \u2013 The Hidden Gap for McLeod Users: IT Support Beyond the TMS\n\n[33] https://ninjadispatch.com/2025/05/30/mcleod-trained-dispatchers/ \u2013 McLeod-Trained Dispatchers | Expert Freight Dispatch Help\n\n[34] https://www.ziprecruiter.com/co/Mcleod-Software/Jobs/Implementation-Consultant \u2013 MCLEOD SOFTWARE Implementation Consultant Jobs (Now Hiring)\n\n[35] https://docs.rtafleet.com/rta-manual/load-master-interface/setting-up-load-master \u2013 Setting up Load Master",
+  "verification": {
+    "summary": "5 PARTIAL  36 UNVERIFIED  4 UNREACHABLE",
+    "verified_ratio": 0.1111111111111111,
+    "claims": [
+      {
+        "claim": "# Common Problems with McLeod TMS Onboarding: Causes and Mitigation Strategies\n\n## Executive Summary\n\nMcLeod TMS onboarding encounters persistent challenges spanning technical infrastructure, user training complexity, IT support gaps, and implementation coordination costs that extend well beyond the core system deployment.",
+        "raw_sentence": "# Common Problems with McLeod TMS Onboarding: Causes and Mitigation Strategies\n\n## Executive Summary\n\nMcLeod TMS onboarding encounters persistent challenges spanning technical infrastructure, user training complexity, IT support gaps, and implementation coordination costs that extend well beyond the core system deployment[1][1][1].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.2857142857142857,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.2857142857142857,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.2857142857142857,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "Organizations implementing McLeod systems face substantial organizational and technical hurdles, including the need for extensive specialist training, supplemental IT support beyond the vendor's scope, and significant expenditures on consulting services that can strain mid-market and small operator budgets.",
+        "raw_sentence": "Organizations implementing McLeod systems face substantial organizational and technical hurdles, including the need for extensive specialist training, supplemental IT support beyond the vendor's scope, and significant expenditures on consulting services that can strain mid-market and small operator budgets[5][12][33].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 5,
+            "url": "https://community.spiceworks.com/t/looking-for-knowledgeable-person-to-help-with-mcleod-software-server-migration/690298",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.2771855010660981,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 12,
+            "url": "https://www.mcleodsoftware.com/why-mcleod/our-process/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.32432432432432434,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 33,
+            "url": "https://ninjadispatch.com/2025/05/30/mcleod-trained-dispatchers/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.275,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "Effective mitigation requires comprehensive change management planning, adequate resource allocation, vendor partnership coordination, and realistic timeline expectations aligned with the complexity of transportation management transformation.",
+        "raw_sentence": "Effective mitigation requires comprehensive change management planning, adequate resource allocation, vendor partnership coordination, and realistic timeline expectations aligned with the complexity of transportation management transformation[26].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 26,
+            "url": "https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.37468354430379747,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "**Fragmented Support Responsibility Creates Operational Gaps**: McLeod users encounter significant challenges with information technology problems that fall outside the TMS platform itself, including network security, system integration management, and device uptime assurance.",
+        "raw_sentence": "**Fragmented Support Responsibility Creates Operational Gaps**: McLeod users encounter significant challenges with information technology problems that fall outside the TMS platform itself, including network security, system integration management, and device uptime assurance[1][1][1][1].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.34375,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.34375,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.34375,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.34375,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "The vendor's scope of support focuses narrowly on the LoadMaster and PowerBroker applications themselves, leaving carriers and brokers responsible for the broader infrastructure ecosystem without adequate guidance or resources to manage the interconnected systems that enable day-to-day operations.",
+        "raw_sentence": "The vendor's scope of support focuses narrowly on the LoadMaster and PowerBroker applications themselves, leaving carriers and brokers responsible for the broader infrastructure ecosystem without adequate guidance or resources to manage the interconnected systems that enable day-to-day operations[1][1].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3488843813387424,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3488843813387424,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "This fragmentation frequently becomes a major roadblock during the critical onboarding phase when fleets are attempting to stabilize new workflows while simultaneously managing external system dependencies.",
+        "raw_sentence": "This fragmentation frequently becomes a major roadblock during the critical onboarding phase when fleets are attempting to stabilize new workflows while simultaneously managing external system dependencies[1][1].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.2847457627118644,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.2847457627118644,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "**Steep Learning Curve and Extended Ramp-Up Period**: The McLeod user interface demands significant investment of time for operators to achieve proficiency, with new dispatcher hires requiring weeks to months of training depending on the specific modules and workflows implemented within their organization.",
+        "raw_sentence": "**Steep Learning Curve and Extended Ramp-Up Period**: The McLeod user interface demands significant investment of time for operators to achieve proficiency, with new dispatcher hires requiring weeks to months of training depending on the specific modules and workflows implemented within their organization[33].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 33,
+            "url": "https://ninjadispatch.com/2025/05/30/mcleod-trained-dispatchers/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.4326710816777042,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "User experience reviews consistently cite the interface as complex and non-intuitive, creating barriers to adoption that extend beyond the formal training period.",
+        "raw_sentence": "User experience reviews consistently cite the interface as complex and non-intuitive, creating barriers to adoption that extend beyond the formal training period[16].",
+        "status": "UNREACHABLE",
+        "note": "",
+        "citations": [
+          {
+            "index": 16,
+            "url": "https://www.capterra.com/p/16847/LoadMaster/reviews/",
+            "status": "UNREACHABLE",
+            "quote": "",
+            "score": 0.0,
+            "note": "Could not fetch or parse page"
+          }
+        ]
+      },
+      {
+        "claim": "Getting a new in-house dispatcher up to speed on McLeod's interface can require thousands of dollars in training costs through boot camps and on-site sessions at McLeod's Birmingham headquarters, not including travel and lodging expenses.",
+        "raw_sentence": "Getting a new in-house dispatcher up to speed on McLeod's interface can require thousands of dollars in training costs through boot camps and on-site sessions at McLeod's Birmingham headquarters, not including travel and lodging expenses[33].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 33,
+            "url": "https://ninjadispatch.com/2025/05/30/mcleod-trained-dispatchers/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.5544041450777202,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "**High Implementation Consulting Costs Create Budget Constraints**: Organizations implementing McLeod systems face substantial consulting fees that scale with fleet size and database complexity, with vendors quoting prices justified only for larger operations despite the complexity applying equally to smaller fleets.",
+        "raw_sentence": "**High Implementation Consulting Costs Create Budget Constraints**: Organizations implementing McLeod systems face substantial consulting fees that scale with fleet size and database complexity, with vendors quoting prices justified only for larger operations despite the complexity applying equally to smaller fleets[5][5].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 5,
+            "url": "https://community.spiceworks.com/t/looking-for-knowledgeable-person-to-help-with-mcleod-software-server-migration/690298",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.30275229357798167,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 5,
+            "url": "https://community.spiceworks.com/t/looking-for-knowledgeable-person-to-help-with-mcleod-software-server-migration/690298",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.30275229357798167,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "The costs are structured with advance payment requirements and \"credit\" arrangements for unbilled hours, creating cash flow uncertainty for mid-market carriers.",
+        "raw_sentence": "The costs are structured with advance payment requirements and \"credit\" arrangements for unbilled hours, creating cash flow uncertainty for mid-market carriers[5].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 5,
+            "url": "https://community.spiceworks.com/t/looking-for-knowledgeable-person-to-help-with-mcleod-software-server-migration/690298",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3812316715542522,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "Small owner-operators and smaller fleets often find that the cost of professional migration services makes them prohibitive, forcing companies to pursue budget alternatives using older server hardware and operating systems rather than upgrading infrastructure as recommended.",
+        "raw_sentence": "Small owner-operators and smaller fleets often find that the cost of professional migration services makes them prohibitive, forcing companies to pursue budget alternatives using older server hardware and operating systems rather than upgrading infrastructure as recommended[5].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 5,
+            "url": "https://community.spiceworks.com/t/looking-for-knowledgeable-person-to-help-with-mcleod-software-server-migration/690298",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.31601731601731603,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "**Complex Integration Requirements Demand Specialized Technical Expertise**: Integrating McLeod with telematics systems, accounting software, maintenance management platforms, and other critical business applications requires detailed configuration, scripting, and ongoing automation setup that extends far beyond standard implementation.",
+        "raw_sentence": "**Complex Integration Requirements Demand Specialized Technical Expertise**: Integrating McLeod with telematics systems, accounting software, maintenance management platforms, and other critical business applications requires detailed configuration, scripting, and ongoing automation setup that extends far beyond standard implementation[6][6][35].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 6,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.29082774049217003,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 6,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.29082774049217003,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 35,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/setting-up-load-master",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.2543352601156069,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "The integration process involves multiple phases including customer discovery, PowerShell script preparation, directory configuration, facility setup, and scheduled task automation, each requiring coordination between vendor support, customer IT teams, and third-party system providers.",
+        "raw_sentence": "The integration process involves multiple phases including customer discovery, PowerShell script preparation, directory configuration, facility setup, and scheduled task automation, each requiring coordination between vendor support, customer IT teams, and third-party system providers[6][6][35].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 6,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.375,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 6,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.375,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 35,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/setting-up-load-master",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.25806451612903225,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "Configuration errors or incomplete setup of these integrations directly undermine the value of the TMS investment and can persist for months if not properly validated and tested.",
+        "raw_sentence": "Configuration errors or incomplete setup of these integrations directly undermine the value of the TMS investment and can persist for months if not properly validated and tested[6][6][35].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 6,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.2801556420233463,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 6,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.2801556420233463,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 35,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/setting-up-load-master",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.37341772151898733,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "**Organizational Change Management Receives Insufficient Planning Attention**: Many TMS implementations fail to allocate adequate resources to change management activities including process documentation, stakeholder alignment, and adoption strategy development before the system goes live.",
+        "raw_sentence": "**Organizational Change Management Receives Insufficient Planning Attention**: Many TMS implementations fail to allocate adequate resources to change management activities including process documentation, stakeholder alignment, and adoption strategy development before the system goes live[26].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 26,
+            "url": "https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3140495867768595,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "The complexity and organizational impact of a TMS implementation are frequently underestimated during the planning phase, resulting in insufficient human capital, unrealistic timelines, and corner-cutting that creates problems during deployment and after go-live.",
+        "raw_sentence": "The complexity and organizational impact of a TMS implementation are frequently underestimated during the planning phase, resulting in insufficient human capital, unrealistic timelines, and corner-cutting that creates problems during deployment and after go-live[26].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 26,
+            "url": "https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3548387096774194,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "Effective implementation requires visible executive ownership, dedicated project leadership, cross-departmental resource allocation, and structured testing and training plans that are often deprioritized in favor of accelerated deployment schedules.",
+        "raw_sentence": "Effective implementation requires visible executive ownership, dedicated project leadership, cross-departmental resource allocation, and structured testing and training plans that are often deprioritized in favor of accelerated deployment schedules[26].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 26,
+            "url": "https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.391304347826087,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "McLeod's responsibility boundaries encompass the LoadMaster and PowerBroker applications themselves, but the surrounding infrastructure that enables these systems to function\u2014networks, security, device management, system integration, and uptime across multiple platforms\u2014falls outside the vendor's direct support scope.",
+        "raw_sentence": "McLeod's responsibility boundaries encompass the LoadMaster and PowerBroker applications themselves, but the surrounding infrastructure that enables these systems to function\u2014networks, security, device management, system integration, and uptime across multiple platforms\u2014falls outside the vendor's direct support scope[1][1].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3888888888888889,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3888888888888889,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "Users report that they must handle day-to-day IT problems including keeping networks secure and reliable, managing integrations and automations beyond the TMS, and ensuring uptime across systems and devices, challenges that require supplemental specialized support beyond what McLeod provides.",
+        "raw_sentence": "Users report that they must handle day-to-day IT problems including keeping networks secure and reliable, managing integrations and automations beyond the TMS, and ensuring uptime across systems and devices, challenges that require supplemental specialized support beyond what McLeod provides[1][1][1].",
+        "status": "PARTIAL",
+        "note": "",
+        "citations": [
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "PARTIAL",
+            "quote": "Carriers and freight brokers consistently mentioned challenges such as: Keeping networks secure and reliable Managing integrations and automations beyond the TMS Ensuring uptime across systems and devices Handling day-to-day IT problems that fall outside McLeod\u2019s scope Without supplemental support, these challenges usually become major roadblocks.",
+            "score": 0.7142857142857143,
+            "note": "Fuzzy token overlap"
+          },
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "PARTIAL",
+            "quote": "Carriers and freight brokers consistently mentioned challenges such as: Keeping networks secure and reliable Managing integrations and automations beyond the TMS Ensuring uptime across systems and devices Handling day-to-day IT problems that fall outside McLeod\u2019s scope Without supplemental support, these challenges usually become major roadblocks.",
+            "score": 0.7142857142857143,
+            "note": "Fuzzy token overlap"
+          },
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "PARTIAL",
+            "quote": "Carriers and freight brokers consistently mentioned challenges such as: Keeping networks secure and reliable Managing integrations and automations beyond the TMS Ensuring uptime across systems and devices Handling day-to-day IT problems that fall outside McLeod\u2019s scope Without supplemental support, these challenges usually become major roadblocks.",
+            "score": 0.7142857142857143,
+            "note": "Fuzzy token overlap"
+          }
+        ]
+      },
+      {
+        "claim": "Without this supplemental support infrastructure in place, these challenges typically become major roadblocks that can halt operations.",
+        "raw_sentence": "Without this supplemental support infrastructure in place, these challenges typically become major roadblocks that can halt operations[1][1].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.5294117647058824,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.5294117647058824,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "Carriers and brokers cannot afford significant downtime or integration failures during this period, yet lack clear guidance or resources from McLeod for managing these broader IT challenges.",
+        "raw_sentence": "Carriers and brokers cannot afford significant downtime or integration failures during this period, yet lack clear guidance or resources from McLeod for managing these broader IT challenges[1][1][1].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3076923076923077,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3076923076923077,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 1,
+            "url": "https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3076923076923077,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "User reviews consistently describe the software as \"very complex,\" \"not user friendly,\" and requiring \"high level of expertise\" to operate effectively.",
+        "raw_sentence": "User reviews consistently describe the software as \"very complex,\" \"not user friendly,\" and requiring \"high level of expertise\" to operate effectively[16].",
+        "status": "UNREACHABLE",
+        "note": "",
+        "citations": [
+          {
+            "index": 16,
+            "url": "https://www.capterra.com/p/16847/LoadMaster/reviews/",
+            "status": "UNREACHABLE",
+            "quote": "",
+            "score": 0.0,
+            "note": "Could not fetch or parse page"
+          }
+        ]
+      },
+      {
+        "claim": "The interface is described as \"outdated\" and \"difficult to use,\" and it took experienced users \"over a month to understand\" the system despite acknowledging that it contains helpful features.",
+        "raw_sentence": "The interface is described as \"outdated\" and \"difficult to use,\" and it took experienced users \"over a month to understand\" the system despite acknowledging that it contains helpful features[16].",
+        "status": "UNREACHABLE",
+        "note": "",
+        "citations": [
+          {
+            "index": 16,
+            "url": "https://www.capterra.com/p/16847/LoadMaster/reviews/",
+            "status": "UNREACHABLE",
+            "quote": "",
+            "score": 0.0,
+            "note": "Could not fetch or parse page"
+          }
+        ]
+      },
+      {
+        "claim": "New dispatchers require weeks to months to achieve proficiency depending on the complexity of the organization's specific workflows, load types, and customer requirements.",
+        "raw_sentence": "New dispatchers require weeks to months to achieve proficiency depending on the complexity of the organization's specific workflows, load types, and customer requirements[33].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 33,
+            "url": "https://ninjadispatch.com/2025/05/30/mcleod-trained-dispatchers/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.45454545454545453,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "The training itself carries direct costs: McLeod offers boot camps and on-site training sessions at its Birmingham headquarters that cost thousands per employee, plus travel and lodging expenses.",
+        "raw_sentence": "The training itself carries direct costs: McLeod offers boot camps and on-site training sessions at its Birmingham headquarters that cost thousands per employee, plus travel and lodging expenses[33].",
+        "status": "PARTIAL",
+        "note": "",
+        "citations": [
+          {
+            "index": 33,
+            "url": "https://ninjadispatch.com/2025/05/30/mcleod-trained-dispatchers/",
+            "status": "PARTIAL",
+            "quote": "McLeod offers boot camps and on-site sessions at its Birmingham, AL headquarters that cost thousands per employee, not including travel and lodging.",
+            "score": 0.7755102040816326,
+            "note": "Fuzzy sequence similarity"
+          }
+        ]
+      },
+      {
+        "claim": "Users report that talking with other staff was the most effective action in dealing with system complexities and recovery from errors.",
+        "raw_sentence": "Users report that talking with other staff was the most effective action in dealing with system complexities and recovery from errors[16].",
+        "status": "UNREACHABLE",
+        "note": "",
+        "citations": [
+          {
+            "index": 16,
+            "url": "https://www.capterra.com/p/16847/LoadMaster/reviews/",
+            "status": "UNREACHABLE",
+            "quote": "",
+            "score": 0.0,
+            "note": "Could not fetch or parse page"
+          }
+        ]
+      },
+      {
+        "claim": "McLeod provides classroom training on a weekly basis at their Birmingham headquarters, live remote training classes, on-site training, and specialized one-on-one training opportunities.",
+        "raw_sentence": "McLeod provides classroom training on a weekly basis at their Birmingham headquarters, live remote training classes, on-site training, and specialized one-on-one training opportunities[12][12].",
+        "status": "PARTIAL",
+        "note": "",
+        "citations": [
+          {
+            "index": 12,
+            "url": "https://www.mcleodsoftware.com/why-mcleod/our-process/",
+            "status": "PARTIAL",
+            "quote": "Live remote training classes On-site training at your facility Specialized one-on-one training at McLeod\u2019s annual User Conference Special webinars, seminars, ongoing education, and conferences for our customers on important industry topics that go beyond our software products Design Our process engineers and business analysts are available to work with our customers as part of their project to help analyze current business processes and: Make configuration option decisions for deploying our products Identify opportunities for process improvement as part of the project Design and execute modifications to the products when it is essential Train and coach our customers to use the extensive tools native to our systems that allow the creation of simple modifications and the creation of business process automation by the customer\u2019s own development team Use of our extensive open web service APIs to accomplish custom systems integration projects, or projects to extend the functionality of the system by the customer\u2019s own development team Project Management Every implementation or full system upgrade project is assigned to a McLeod Project Manager who will guide our customer through the process and advise them on best practices for a successful implementation.",
+            "score": 0.7,
+            "note": "Fuzzy token overlap"
+          },
+          {
+            "index": 12,
+            "url": "https://www.mcleodsoftware.com/why-mcleod/our-process/",
+            "status": "PARTIAL",
+            "quote": "Live remote training classes On-site training at your facility Specialized one-on-one training at McLeod\u2019s annual User Conference Special webinars, seminars, ongoing education, and conferences for our customers on important industry topics that go beyond our software products Design Our process engineers and business analysts are available to work with our customers as part of their project to help analyze current business processes and: Make configuration option decisions for deploying our products Identify opportunities for process improvement as part of the project Design and execute modifications to the products when it is essential Train and coach our customers to use the extensive tools native to our systems that allow the creation of simple modifications and the creation of business process automation by the customer\u2019s own development team Use of our extensive open web service APIs to accomplish custom systems integration projects, or projects to extend the functionality of the system by the customer\u2019s own development team Project Management Every implementation or full system upgrade project is assigned to a McLeod Project Manager who will guide our customer through the process and advise them on best practices for a successful implementation.",
+            "score": 0.7,
+            "note": "Fuzzy token overlap"
+          }
+        ]
+      },
+      {
+        "claim": "Fourth, organizations should consider hiring or contracting with McLeod-trained dispatchers who are already proficient with the system rather than building expertise from scratch, trading upfront hiring costs against extended ramp-up periods.",
+        "raw_sentence": "Fourth, organizations should consider hiring or contracting with McLeod-trained dispatchers who are already proficient with the system rather than building expertise from scratch, trading upfront hiring costs against extended ramp-up periods[33].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 33,
+            "url": "https://ninjadispatch.com/2025/05/30/mcleod-trained-dispatchers/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.4034090909090909,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "One organization managing a 40-truck fleet with a 5GB database sought migration assistance from McLeod and received quotes that \"a price justifiable only for a 25 user+ system and a 50GB db,\" requiring advance payment with unbilled hours credited to the account against future work.",
+        "raw_sentence": "One organization managing a 40-truck fleet with a 5GB database sought migration assistance from McLeod and received quotes that \"a price justifiable only for a 25 user+ system and a 50GB db,\" requiring advance payment with unbilled hours credited to the account against future work[5].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 5,
+            "url": "https://community.spiceworks.com/t/looking-for-knowledgeable-person-to-help-with-mcleod-software-server-migration/690298",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.42105263157894735,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "Rather than implementing McLeod's recommended approach of upgrading to current operating systems and SQL Server versions, organizations opt to run older hardware and legacy operating systems acquired at substantially discounted prices\u2014sometimes at 60% less cost than new equipment.",
+        "raw_sentence": "Rather than implementing McLeod's recommended approach of upgrading to current operating systems and SQL Server versions, organizations opt to run older hardware and legacy operating systems acquired at substantially discounted prices\u2014sometimes at 60% less cost than new equipment[5].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 5,
+            "url": "https://community.spiceworks.com/t/looking-for-knowledgeable-person-to-help-with-mcleod-software-server-migration/690298",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3308270676691729,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "If McLeod is the correct choice despite consulting costs, organizations should prioritize hiring or contracting with implementation partners who specialize in McLeod systems, as independent consultants often have more flexible pricing structures than the vendor itself.",
+        "raw_sentence": "If McLeod is the correct choice despite consulting costs, organizations should prioritize hiring or contracting with implementation partners who specialize in McLeod systems, as independent consultants often have more flexible pricing structures than the vendor itself[33][34].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 33,
+            "url": "https://ninjadispatch.com/2025/05/30/mcleod-trained-dispatchers/",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3417085427135678,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 34,
+            "url": "https://www.ziprecruiter.com/co/Mcleod-Software/Jobs/Implementation-Consultant",
+            "status": "UNREACHABLE",
+            "quote": "",
+            "score": 0.0,
+            "note": "Could not fetch or parse page"
+          }
+        ]
+      },
+      {
+        "claim": "Implementation requires five distinct phases: initial customer setup and discovery involving multiple stakeholders, LoadMaster configuration and file preparation including PowerShell script customization, RTA system configuration through SAU and facility maintenance, CSM and customer task coordination ensuring data alignment, and finally automation of the integration process through VisualCron scheduling.",
+        "raw_sentence": "Implementation requires five distinct phases: initial customer setup and discovery involving multiple stakeholders, LoadMaster configuration and file preparation including PowerShell script customization, RTA system configuration through SAU and facility maintenance, CSM and customer task coordination ensuring data alignment, and finally automation of the integration process through VisualCron scheduling[6][6][35].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 6,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3902439024390244,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 6,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3902439024390244,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 35,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/setting-up-load-master",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.2585034013605442,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "During the discovery phase itself, teams must identify which specific integration utilities are needed and should be enabled, make decisions about GL code mapping, confirm customer and vendor abbreviations match between systems, and establish which data elements flow in which directions.",
+        "raw_sentence": "During the discovery phase itself, teams must identify which specific integration utilities are needed and should be enabled, make decisions about GL code mapping, confirm customer and vendor abbreviations match between systems, and establish which data elements flow in which directions[6][6][35].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 6,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.2972972972972973,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 6,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.2972972972972973,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 35,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/setting-up-load-master",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.26865671641791045,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "The integration guide for McLeod and RTA systems is a 52+ page technical document that walks Tier 2 support specialists through these requirements\u2014it is not something non-technical staff can execute without guidance.",
+        "raw_sentence": "The integration guide for McLeod and RTA systems is a 52+ page technical document that walks Tier 2 support specialists through these requirements\u2014it is not something non-technical staff can execute without guidance[6][6][35].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 6,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.375,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 6,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.375,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 35,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/setting-up-load-master",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3559322033898305,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "The result is that integrations go live incompletely tested, creating data quality and visibility problems that persist for months.",
+        "raw_sentence": "The result is that integrations go live incompletely tested, creating data quality and visibility problems that persist for months[6][6][35].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 6,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.2857142857142857,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 6,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.2857142857142857,
+            "note": "No supporting sentence found"
+          },
+          {
+            "index": 35,
+            "url": "https://docs.rtafleet.com/rta-manual/load-master-interface/setting-up-load-master",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.35687732342007433,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "### Finding 5: Organizational Change Management Receives Insufficient Planning Attention\n\nResearch on general TMS implementation best practices identifies organizational change management as a critical success factor, yet it is frequently underestimated during McLeod onboarding planning.",
+        "raw_sentence": "### Finding 5: Organizational Change Management Receives Insufficient Planning Attention\n\nResearch on general TMS implementation best practices identifies organizational change management as a critical success factor, yet it is frequently underestimated during McLeod onboarding planning[26].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 26,
+            "url": "https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3395348837209302,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "Organizations often focus implementation planning on system configuration, data migration, and technical testing while giving minimal attention to the organizational transformation required to successfully adopt new business processes and systems.",
+        "raw_sentence": "Organizations often focus implementation planning on system configuration, data migration, and technical testing while giving minimal attention to the organizational transformation required to successfully adopt new business processes and systems[26].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 26,
+            "url": "https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.35374149659863946,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "First, organizations often fail to recognize the full complexity and organizational impact that a TMS implementation represents.",
+        "raw_sentence": "First, organizations often fail to recognize the full complexity and organizational impact that a TMS implementation represents[26].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 26,
+            "url": "https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.5294117647058824,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "Second, without adequate recognition of scope and impact, organizations fail to allocate sufficient resources to change management activities.",
+        "raw_sentence": "Second, without adequate recognition of scope and impact, organizations fail to allocate sufficient resources to change management activities[26].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 26,
+            "url": "https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3669724770642202,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "Third, many organizations fail to document and compare current processes versus the new processes that McLeod will enable.",
+        "raw_sentence": "Third, many organizations fail to document and compare current processes versus the new processes that McLeod will enable[26].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 26,
+            "url": "https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.5882352941176471,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "The consequences of inadequate change management are substantial: slower adoption, higher error rates during and after go-live, staff frustration and turnover, and customer service disruptions.",
+        "raw_sentence": "The consequences of inadequate change management are substantial: slower adoption, higher error rates during and after go-live, staff frustration and turnover, and customer service disruptions[26].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 26,
+            "url": "https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.35942028985507246,
+            "note": "No supporting sentence found"
+          }
+        ]
+      },
+      {
+        "claim": "The implementation plan should start not when the system is beginning to move through configuration, but when the idea of bringing a new TMS is first brought to the table.",
+        "raw_sentence": "The implementation plan should start not when the system is beginning to move through configuration, but when the idea of bringing a new TMS is first brought to the table[26].",
+        "status": "PARTIAL",
+        "note": "",
+        "citations": [
+          {
+            "index": 26,
+            "url": "https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid",
+            "status": "PARTIAL",
+            "quote": "What we mean from the very beginning is even the steps of how the TMS will be selected needs to be part of the plan, meaning the project plan is not when the TMS is starting to move through implementation, but when the idea of bringing a new TMS is first brought to the table.",
+            "score": 0.8333333333333334,
+            "note": "Fuzzy token overlap"
+          }
+        ]
+      },
+      {
+        "claim": "It should map current processes step-by-step, then map the new processes McLeod will enable, and explicitly compare the two to identify where work flows will change.",
+        "raw_sentence": "It should map current processes step-by-step, then map the new processes McLeod will enable, and explicitly compare the two to identify where work flows will change[26].",
+        "status": "PARTIAL",
+        "note": "",
+        "citations": [
+          {
+            "index": 26,
+            "url": "https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid",
+            "status": "PARTIAL",
+            "quote": "Intek Freight and Logistics has assembled a comprehensive list that it has found to be a top-level project plan for a TMS implementation: Step 1: Set the Goal that the Project will be Measured Against Step 2: Get Stakeholders Involved Step 3: Design the General Timetable Plan Step 4: Assign Project Leader & Prepare for Change Step 5: Assemble Requirements Document Step 6: Map Current Processes Step 7: Start the Evaluation Process with Plenty of Education to Determine the TMS Software Vendors to Include in the RFP Step 8: Determine Your Design and Best Fit Against the TMS Software Providers Responses to the Requirements Document and the Pricing Proposals Step 9: Begin the Selection Process Step 10: Narrow Selection Process to the Top 2 or 3 Step 11: Onsite Visit Step 12: Weight the Plus / Minuses Step 13: Map the New Process and Compare Against Old Processes to Identify Possible Shortcomings that Will Need to Be Addressed with Recommended TMS before Presenting Recommendation Step 14: Present Recommended TMS to Stakeholders Committee for Approval Step 15: Negotiate Final Pricing Details that May Exist Step 16: Actual Implementation Process Begins Step 15: Assemble Detailed Project Plan to Adhere To Over Project Step 16: Assign Responsibilities to the Project Plan Step 17: Work the Details of the Project with Regular Meetings with Team Members and Every Two or Three Weeks Check in with Stakeholder Committee.",
+            "score": 0.6521739130434783,
+            "note": "Fuzzy token overlap"
+          }
+        ]
+      },
+      {
+        "claim": "Customer-facing staff need to understand what new capabilities or visibility they will be able to offer customers.",
+        "raw_sentence": "Customer-facing staff need to understand what new capabilities or visibility they will be able to offer customers[16][26].",
+        "status": "UNVERIFIED",
+        "note": "",
+        "citations": [
+          {
+            "index": 16,
+            "url": "https://www.capterra.com/p/16847/LoadMaster/reviews/",
+            "status": "UNREACHABLE",
+            "quote": "",
+            "score": 0.0,
+            "note": "Could not fetch or parse page"
+          },
+          {
+            "index": 26,
+            "url": "https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid",
+            "status": "UNVERIFIED",
+            "quote": "",
+            "score": 0.3755868544600939,
+            "note": "No supporting sentence found"
+          }
+        ]
+      }
+    ]
+  },
+  "verified_report": "## Executive Summary\nUsers report that they must handle day-to-day IT problems including keeping networks secure and reliable, managing integrations and automations beyond the TMS, and ensuring uptime across systems and devices, challenges that require supplemental specialized support beyond what McLeod provides[1][1][1].\nThe training itself carries direct costs: McLeod offers boot camps and on-site training sessions at its Birmingham headquarters that cost thousands per employee, plus travel and lodging expenses[33].\n\n## Key Findings\n1. McLeod provides classroom training on a weekly basis at their Birmingham headquarters, live remote training classes, on-site training, and specialized one-on-one training opportunities[12][12].\n2. The implementation plan should start not when the system is beginning to move through configuration, but when the idea of bringing a new TMS is first brought to the table[26].\n3. It should map current processes step-by-step, then map the new processes McLeod will enable, and explicitly compare the two to identify where work flows will change[26].\n\n## Supporting Detail\nNo additional verified detail available.\n\n## Gaps & Uncertainty\nUnverified claims (no supporting quote found):\n- # Common Problems with McLeod TMS Onboarding: Causes and Mitigation Strategies\n\n## Executive Summary\n\nMcLeod TMS onboarding encounters persistent challenges spanning technical infrastructure, user training complexity, IT support gaps, and implementation coordination costs that extend well beyond the core system deployment[1][1][1].\n- Organizations implementing McLeod systems face substantial organizational and technical hurdles, including the need for extensive specialist training, supplemental IT support beyond the vendor's scope, and significant expenditures on consulting services that can strain mid-market and small operator budgets[5][12][33].\n- Effective mitigation requires comprehensive change management planning, adequate resource allocation, vendor partnership coordination, and realistic timeline expectations aligned with the complexity of transportation management transformation[26].\n- **Fragmented Support Responsibility Creates Operational Gaps**: McLeod users encounter significant challenges with information technology problems that fall outside the TMS platform itself, including network security, system integration management, and device uptime assurance[1][1][1][1].\n- The vendor's scope of support focuses narrowly on the LoadMaster and PowerBroker applications themselves, leaving carriers and brokers responsible for the broader infrastructure ecosystem without adequate guidance or resources to manage the interconnected systems that enable day-to-day operations[1][1].\n- This fragmentation frequently becomes a major roadblock during the critical onboarding phase when fleets are attempting to stabilize new workflows while simultaneously managing external system dependencies[1][1].\n- **Steep Learning Curve and Extended Ramp-Up Period**: The McLeod user interface demands significant investment of time for operators to achieve proficiency, with new dispatcher hires requiring weeks to months of training depending on the specific modules and workflows implemented within their organization[33].\n- Getting a new in-house dispatcher up to speed on McLeod's interface can require thousands of dollars in training costs through boot camps and on-site sessions at McLeod's Birmingham headquarters, not including travel and lodging expenses[33].\n- **High Implementation Consulting Costs Create Budget Constraints**: Organizations implementing McLeod systems face substantial consulting fees that scale with fleet size and database complexity, with vendors quoting prices justified only for larger operations despite the complexity applying equally to smaller fleets[5][5].\n- The costs are structured with advance payment requirements and \"credit\" arrangements for unbilled hours, creating cash flow uncertainty for mid-market carriers[5].\n- Small owner-operators and smaller fleets often find that the cost of professional migration services makes them prohibitive, forcing companies to pursue budget alternatives using older server hardware and operating systems rather than upgrading infrastructure as recommended[5].\n- **Complex Integration Requirements Demand Specialized Technical Expertise**: Integrating McLeod with telematics systems, accounting software, maintenance management platforms, and other critical business applications requires detailed configuration, scripting, and ongoing automation setup that extends far beyond standard implementation[6][6][35].\n- The integration process involves multiple phases including customer discovery, PowerShell script preparation, directory configuration, facility setup, and scheduled task automation, each requiring coordination between vendor support, customer IT teams, and third-party system providers[6][6][35].\n- Configuration errors or incomplete setup of these integrations directly undermine the value of the TMS investment and can persist for months if not properly validated and tested[6][6][35].\n- **Organizational Change Management Receives Insufficient Planning Attention**: Many TMS implementations fail to allocate adequate resources to change management activities including process documentation, stakeholder alignment, and adoption strategy development before the system goes live[26].\n- The complexity and organizational impact of a TMS implementation are frequently underestimated during the planning phase, resulting in insufficient human capital, unrealistic timelines, and corner-cutting that creates problems during deployment and after go-live[26].\n- Effective implementation requires visible executive ownership, dedicated project leadership, cross-departmental resource allocation, and structured testing and training plans that are often deprioritized in favor of accelerated deployment schedules[26].\n- McLeod's responsibility boundaries encompass the LoadMaster and PowerBroker applications themselves, but the surrounding infrastructure that enables these systems to function\u2014networks, security, device management, system integration, and uptime across multiple platforms\u2014falls outside the vendor's direct support scope[1][1].\n- Without this supplemental support infrastructure in place, these challenges typically become major roadblocks that can halt operations[1][1].\n- Carriers and brokers cannot afford significant downtime or integration failures during this period, yet lack clear guidance or resources from McLeod for managing these broader IT challenges[1][1][1].\n- New dispatchers require weeks to months to achieve proficiency depending on the complexity of the organization's specific workflows, load types, and customer requirements[33].\n- Fourth, organizations should consider hiring or contracting with McLeod-trained dispatchers who are already proficient with the system rather than building expertise from scratch, trading upfront hiring costs against extended ramp-up periods[33].\n- One organization managing a 40-truck fleet with a 5GB database sought migration assistance from McLeod and received quotes that \"a price justifiable only for a 25 user+ system and a 50GB db,\" requiring advance payment with unbilled hours credited to the account against future work[5].\n- Rather than implementing McLeod's recommended approach of upgrading to current operating systems and SQL Server versions, organizations opt to run older hardware and legacy operating systems acquired at substantially discounted prices\u2014sometimes at 60% less cost than new equipment[5].\n- If McLeod is the correct choice despite consulting costs, organizations should prioritize hiring or contracting with implementation partners who specialize in McLeod systems, as independent consultants often have more flexible pricing structures than the vendor itself[33][34].\n- Implementation requires five distinct phases: initial customer setup and discovery involving multiple stakeholders, LoadMaster configuration and file preparation including PowerShell script customization, RTA system configuration through SAU and facility maintenance, CSM and customer task coordination ensuring data alignment, and finally automation of the integration process through VisualCron scheduling[6][6][35].\n- During the discovery phase itself, teams must identify which specific integration utilities are needed and should be enabled, make decisions about GL code mapping, confirm customer and vendor abbreviations match between systems, and establish which data elements flow in which directions[6][6][35].\n- The integration guide for McLeod and RTA systems is a 52+ page technical document that walks Tier 2 support specialists through these requirements\u2014it is not something non-technical staff can execute without guidance[6][6][35].\n- The result is that integrations go live incompletely tested, creating data quality and visibility problems that persist for months[6][6][35].\n- ### Finding 5: Organizational Change Management Receives Insufficient Planning Attention\n\nResearch on general TMS implementation best practices identifies organizational change management as a critical success factor, yet it is frequently underestimated during McLeod onboarding planning[26].\n- Organizations often focus implementation planning on system configuration, data migration, and technical testing while giving minimal attention to the organizational transformation required to successfully adopt new business processes and systems[26].\n- First, organizations often fail to recognize the full complexity and organizational impact that a TMS implementation represents[26].\n- Second, without adequate recognition of scope and impact, organizations fail to allocate sufficient resources to change management activities[26].\n- Third, many organizations fail to document and compare current processes versus the new processes that McLeod will enable[26].\n- The consequences of inadequate change management are substantial: slower adoption, higher error rates during and after go-live, staff frustration and turnover, and customer service disruptions[26].\n- Customer-facing staff need to understand what new capabilities or visibility they will be able to offer customers[16][26].\n- User experience reviews consistently cite the interface as complex and non-intuitive, creating barriers to adoption that extend beyond the formal training period[16].\n- User reviews consistently describe the software as \"very complex,\" \"not user friendly,\" and requiring \"high level of expertise\" to operate effectively[16].\n- The interface is described as \"outdated\" and \"difficult to use,\" and it took experienced users \"over a month to understand\" the system despite acknowledging that it contains helpful features[16].\n- Users report that talking with other staff was the most effective action in dealing with system complexities and recovery from errors[16].\n\n## Sources\n[1] https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/\n[2] https://www.ttnews.com/articles/mcleod-ai-capabilities-2024\n[3] https://www.mcleodsoftware.com\n[4] https://www.youtube.com/watch?v=VtSuXJYkYA4\n[5] https://community.spiceworks.com/t/looking-for-knowledgeable-person-to-help-with-mcleod-software-server-migration/690298\n[6] https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2\n[7] https://www.mcleodsoftware.com/why-mcleod/insights/\n[8] https://www.truckinginfo.com/news/mcleod-software-says-bankrupt-mcleod-no-connection\n[9] https://www.datatruck.io/data-migration\n[10] https://www.isaacinstruments.com/blog/best-practices/isaac-and-mcleod-integration/\n[11] https://optimaldynamics.com/resource/recapping-our-time-at-the-mcleod-software-user-conference-ai-change-management-and-building-connections\n[12] https://www.mcleodsoftware.com/why-mcleod/our-process/\n[13] https://support.techship.io/support/solutions/articles/263384-mcleod-onboarding-requirements-information-\n[14] https://www.scribd.com/document/276969384/TMS-Error-Troubleshooting\n[15] https://www.mcleodsoftware.com/why-mcleod/resources/press-releases/mcleod-software-announces-partnership-updates-with-24-2-tms-upgrade/\n[16] https://www.capterra.com/p/16847/LoadMaster/reviews/\n[17] https://www.mcleodsoftware.com/why-mcleod/resources/press-releases/mcleod-software-launches-new-release-advancing-smarter-operations-faster-decisions-financial-clarity/\n[18] https://www.youtube.com/watch?v=_kQWYP5PwDw\n[19] https://www.youtube.com/watch?v=Qr7XaFix0Ds\n[20] https://community.spiceworks.com/t/lagging-and-slow-on-virtual-servers/203004\n[21] https://www.mcleodsoftware.com/solutions/carrier-management/\n[22] https://pubmed.ncbi.nlm.nih.gov/15203529/\n[23] https://www.mcleodsoftware.com/who-we-serve/truckload-carriers/\n[24] https://www.youtube.com/watch?v=LolfBut7_zs\n[25] https://angusmcleod.com/mcleod-management-model/\n[26] https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid\n[27] https://www.mcleodsoftware.com/who-we-serve/private-fleets/\n[28] https://www.freightwaves.com/news/technology-mcleod-clients-discuss-order-lane-profitability-analysis-tools\n[29] https://kb.samsara.com/hc/en-us/articles/360049126291-Integrate-with-McLeod-DocumentPower\n[30] https://tetrate.io/learn/ai/mcp/implementation-best-practices\n[31] https://lead.devclarity.ai/case-studies/mcleod\n[32] https://www.mcleodsoftware.com/solutions/pricing-order-management/\n[33] https://ninjadispatch.com/2025/05/30/mcleod-trained-dispatchers/\n[34] https://www.ziprecruiter.com/co/Mcleod-Software/Jobs/Implementation-Consultant\n[35] https://docs.rtafleet.com/rta-manual/load-master-interface/setting-up-load-master\n[36] https://pubmed.ncbi.nlm.nih.gov/22111695/\n[37] https://www.velosio.com/blog/go-live-effective-planning-and-cutover-controls/",
+  "digest": "## Executive Summary\n\nUsers report that they must handle day-to-day IT problems, including keeping networks secure and reliable, managing integrations and automations beyond the TMS, and ensuring uptime across systems and devices. These challenges require supplemental specialized support beyond what McLeod provides[1]. The training itself carries direct costs: McLeod offers boot camps and on-site training sessions at its Birmingham headquarters that cost thousands per employee, plus travel and lodging expenses[33].\n\n## Key Findings\n\n1. McLeod provides classroom training on a weekly basis at their Birmingham headquarters, live remote training classes, on-site training, and specialized one-on-one training opportunities[12].\n2. The implementation plan should start not when the system is beginning to move through configuration, but when the idea of bringing a new TMS is first brought to the table[26].\n3. It should map current processes step-by-step, then map the new processes McLeod will enable, and explicitly compare the two to identify where workflows will change[26].\n\n## Supporting Detail\n\nNo additional verified detail available.\n\n## Gaps & Uncertainty\n\nUnverified claims (no supporting quote found):\n- Common Problems with McLeod TMS Onboarding: Causes and Mitigation Strategies\n\n## Executive Summary\n\nMcLeod TMS onboarding encounters persistent challenges spanning technical infrastructure, user training complexity, IT support gaps, and implementation coordination costs that extend well beyond the core system deployment[1]. Organizations implementing McLeod systems face substantial organizational and technical hurdles, including the need for extensive specialist training, supplemental IT support beyond the vendor's scope, and significant expenditures on consulting services that can strain mid-market and small operator budgets[5][12][33]. Effective mitigation requires comprehensive change management planning, adequate resource allocation, vendor partnership coordination, and realistic timeline expectations aligned with the complexity of transportation management transformation[26].\n\n**Fragmented Support Responsibility Creates Operational Gaps**: McLeod users encounter significant challenges with information technology problems that fall outside the TMS platform itself, including network security, system integration management, and device uptime assurance[1]. The vendor's scope of support focuses narrowly on the LoadMaster and PowerBroker applications themselves, leaving carriers and brokers responsible for the broader infrastructure ecosystem without adequate guidance or resources to manage the interconnected systems that enable day-to-day operations[1]. This fragmentation frequently becomes a major roadblock during the critical onboarding phase when fleets are attempting to stabilize new workflows while simultaneously managing external system dependencies[1].\n\n**Steep Learning Curve and Extended Ramp-Up Period**: The McLeod user interface demands significant investment of time for operators to achieve proficiency, with new dispatcher hires requiring weeks to months of training depending on the specific modules and workflows implemented within their organization[33]. Getting a new in-house dispatcher up to speed on McLeod's interface can require thousands of dollars in training costs through boot camps and on-site sessions at McLeod's Birmingham headquarters, not including travel and lodging expenses[33].\n\n**High Implementation Consulting Costs Create Budget Constraints**: Organizations implementing McLeod systems face substantial consulting fees that scale with fleet size and database complexity, with vendors quoting prices justified only for larger operations despite the complexity applying equally to smaller fleets[5]. The costs are structured with advance payment requirements and \"credit\" arrangements for unbilled hours, creating cash flow uncertainty for mid-market carriers[5]. Small owner-operators and smaller fleets often find that the cost of professional migration services makes them prohibitive, forcing companies to pursue budget alternatives using older server hardware and operating systems rather than upgrading infrastructure as recommended[5].\n\n**Complex Integration Requirements Demand Specialized Technical Expertise**: Integrating McLeod with telematics systems, accounting software, maintenance management platforms, and other critical business applications requires detailed configuration, scripting, and ongoing automation setup that extends far beyond standard implementation[6][35]. The integration process involves multiple phases including customer discovery, PowerShell script preparation, directory configuration, facility setup, and scheduled task automation, each requiring coordination between vendor support, customer IT teams, and third-party system providers[6][35]. Configuration errors or incomplete setup of these integrations directly undermine the value of the TMS investment and can persist for months if not properly validated and tested[6][35].\n\n**Organizational Change Management Receives Insufficient Planning Attention**: Many TMS implementations fail to allocate adequate resources to change management activities including process documentation, stakeholder alignment, and adoption strategy development before the system goes live[26]. The complexity and organizational impact of a TMS implementation are frequently underestimated during the planning phase, resulting in insufficient human capital, unrealistic timelines, and corner-cutting that creates problems during deployment and after go-live[26]. Effective implementation requires visible executive ownership, dedicated project leadership, cross-departmental resource allocation, and structured testing and training plans that are often deprioritized in favor of accelerated deployment schedules[26].\n\nMcLeod's responsibility boundaries encompass the LoadMaster and PowerBroker applications themselves, but the surrounding infrastructure that enables these systems to function\u2014networks, security, device management, system integration, and uptime across multiple platforms\u2014falls outside the vendor's direct support scope[1]. Without this supplemental support infrastructure in place, these challenges typically become major roadblocks that can halt operations[1]. Carriers and brokers cannot afford significant downtime or integration failures during this period, yet lack clear guidance or resources from McLeod for managing these broader IT challenges[1]. New dispatchers require weeks to months to achieve proficiency depending on the complexity of the organization's specific workflows, load types, and customer requirements[33]. Organizations should consider hiring or contracting with McLeod-trained dispatchers who are already proficient with the system rather than building expertise from scratch, trading upfront hiring costs against extended ramp-up periods[33].\n\nOne organization managing a 40-truck fleet with a 5GB database sought migration assistance from McLeod and received quotes that \"a price justifiable only for a 25 user+ system and a 50GB db,\" requiring advance payment with unbilled hours credited to the account against future work[5]. Rather than implementing McLeod's recommended approach of upgrading to current operating systems and SQL Server versions, organizations opt to run older hardware and legacy operating systems acquired at substantially discounted prices\u2014sometimes at 60% less cost than new equipment[5]. If McLeod is the correct choice despite consulting costs, organizations should prioritize hiring or contracting with implementation partners who specialize in McLeod systems, as independent consultants often have more flexible pricing structures than the vendor itself[33][34].\n\nImplementation requires five distinct phases: initial customer setup and discovery involving multiple stakeholders, LoadMaster configuration and file preparation including PowerShell script customization, RTA system configuration through SAU and facility maintenance, CSM and customer task coordination ensuring data alignment, and finally automation of the integration process through VisualCron scheduling[6][35]. During the discovery phase itself, teams must identify which specific integration utilities are needed and should be enabled, make decisions about GL code mapping, confirm customer and vendor abbreviations match between systems, and establish which data elements flow in which directions[6][35]. The integration guide for McLeod and RTA systems is a 52+ page technical document that walks Tier 2 support specialists through these requirements\u2014it is not something non-technical staff can execute without guidance[6][35]. The result is that integrations go live incompletely tested, creating data quality and visibility problems that persist for months[6][35].\n\n### Finding 5: Organizational Change Management Receives Insufficient Planning Attention\n\nResearch on general TMS implementation best practices identifies organizational change management as a critical success factor, yet it is frequently underestimated during McLeod onboarding planning[26]. Organizations often focus implementation planning on system configuration, data migration, and technical testing while giving minimal attention to the organizational transformation required to successfully adopt new business processes and systems[26]. First, organizations often fail to recognize the full complexity and organizational impact that a TMS implementation represents[26]. Second, without adequate recognition of scope and impact, organizations fail to allocate sufficient resources to change management activities[26]. Third, many organizations fail to document and compare current processes versus the new processes that McLeod will enable[26]. The consequences of inadequate change management are substantial: slower adoption, higher error rates during and after go-live, staff frustration and turnover, and customer service disruptions[26]. Customer-facing staff need to understand what new capabilities or visibility they will be able to offer customers[16][26]. User experience reviews consistently cite the interface as complex and non-intuitive, creating barriers to adoption that extend beyond the formal training period[16]. User reviews consistently describe the software as \"very complex,\" \"not user friendly,\" and requiring \"high level of expertise\" to operate effectively[16]. The interface is described as \"outdated\" and \"difficult to use,\" and it took experienced users \"over a month to understand\" the system despite acknowledging that it contains helpful features[16]. Users report that talking with other staff was the most effective action in dealing with system complexities and recovery from errors[16].\n\n## Sources\n\n[1] https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/  \n[2] https://www.ttnews.com/articles/mcleod-ai-capabilities-2024  \n[3] https://www.mcleodsoftware.com  \n[4] https://www.youtube.com/watch?v=VtSuXJYkYA4  \n[5] https://community.spiceworks.com/t/looking-for-knowledgeable-person-to-help-with-mcleod-software-server-migration/690298  \n[6] https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2  \n[7] https://www.mcleodsoftware.com/why-mcleod/insights/  \n[8] https://www.truckinginfo.com/news/mcleod-software-says-bankrupt-mcleod-no-connection  \n[9] https://www.datatruck.io/data-migration  \n[10] https://www.isaacinstruments.com/blog/best-practices/isaac-and-mcleod-integration/  \n[11] https://optimaldynamics.com/resource/recapping-our-time-at-the-mcleod-software-user-conference-ai-change-management-and-building-connections  \n[12] https://www.mcleodsoftware.com/why-mcleod/our-process/  \n[13] https://support.techship.io/support/solutions/articles/263384-mcleod-onboarding-requirements-information-  \n[14] https://www.scribd.com/document/276969384/TMS-Error-Troubleshooting  \n[15] https://www.mcleodsoftware.com/why-mcleod/resources/press-releases/mcleod-software-announces-partnership-updates-with-24-2-tms-upgrade/  \n[16] https://www.capterra.com/p/16847/LoadMaster/reviews/  \n[17] https://www.mcleodsoftware.com/why-mcleod/resources/press-releases/mcleod-software-launches-new-release-advancing-smarter-operations-faster-decisions-financial-clarity/  \n[18] https://www.youtube.com/watch?v=_kQWYP5PwDw  \n[19] https://www.youtube.com/watch?v=Qr7XaFix0Ds  \n[20] https://community.spiceworks.com/t/lagging-and-slow-on-virtual-servers/203004  \n[21] https://www.mcleodsoftware.com/solutions/carrier-management/  \n[22] https://pubmed.ncbi.nlm.nih.gov/15203529/  \n[23] https://www.mcleodsoftware.com/who-we-serve/truckload-carriers/  \n[24] https://www.youtube.com/watch?v=LolfBut7_zs  \n[25] https://angusmcleod.com/mcleod-management-model/  \n[26] https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid  \n[27] https://www.mcleodsoftware.com/who-we-serve/private-fleets/  \n[28] https://www.freightwaves.com/news/technology-mcleod-clients-discuss-order-lane-profitability-analysis-tools  \n[29] https://kb.samsara.com/hc/en-us/articles/360049126291-Integrate-with-McLeod-DocumentPower  \n[30] https://tetrate.io/learn/ai/mcp/implementation-best-practices  \n[31] https://lead.devclarity.ai/case-studies/mcleod  \n[32] https://www.mcleodsoftware.com/solutions/pricing-order-management/  \n[33] https://ninjadispatch.com/2025/05/30/mcleod-trained-dispatchers/  \n[34] https://www.ziprecruiter.com/co/Mcleod-Software/Jobs/Implementation-Consultant  \n[35] https://docs.rtafleet.com/rta-manual/load-master-interface/setting-up-load-master  \n[36] https://pubmed.ncbi.nlm.nih.gov/22111695/  \n[37] https://www.velosio.com/blog/go-live-effective-planning-and-cutover-controls/\n\n---\n\n### Source Verification\n**Overall:** 5 PARTIAL  36 UNVERIFIED  4 UNREACHABLE  (11% of claims confirmed)\n\n[1] PARTIAL - https://insperia.com/the-hidden-gap-for-mcleod-users-it-support-beyond-the-tms/\n[2] UNVERIFIED - https://www.ttnews.com/articles/mcleod-ai-capabilities-2024\n[3] UNVERIFIED - https://www.mcleodsoftware.com\n[4] UNVERIFIED - https://www.youtube.com/watch?v=VtSuXJYkYA4\n[5] UNVERIFIED - https://community.spiceworks.com/t/looking-for-knowledgeable-person-to-help-with-mcleod-software-server-migration/690298\n[6] UNVERIFIED - https://docs.rtafleet.com/rta-manual/load-master-interface/%E2%9C%85-mcleod-(loadmaster)-integration-guide-for-tier-2\n[7] UNVERIFIED - https://www.mcleodsoftware.com/why-mcleod/insights/\n[8] UNVERIFIED - https://www.truckinginfo.com/news/mcleod-software-says-bankrupt-mcleod-no-connection\n[9] UNVERIFIED - https://www.datatruck.io/data-migration\n[10] UNVERIFIED - https://www.isaacinstruments.com/blog/best-practices/isaac-and-mcleod-integration/\n[11] UNVERIFIED - https://optimaldynamics.com/resource/recapping-our-time-at-the-mcleod-software-user-conference-ai-change-management-and-building-connections\n[12] PARTIAL - https://www.mcleodsoftware.com/why-mcleod/our-process/\n[13] UNVERIFIED - https://support.techship.io/support/solutions/articles/263384-mcleod-onboarding-requirements-information-\n[14] UNVERIFIED - https://www.scribd.com/document/276969384/TMS-Error-Troubleshooting\n[15] UNVERIFIED - https://www.mcleodsoftware.com/why-mcleod/resources/press-releases/mcleod-software-announces-partnership-updates-with-24-2-tms-upgrade/\n[16] UNREACHABLE - https://www.capterra.com/p/16847/LoadMaster/reviews/\n[17] UNVERIFIED - https://www.mcleodsoftware.com/why-mcleod/resources/press-releases/mcleod-software-launches-new-release-advancing-smarter-operations-faster-decisions-financial-clarity/\n[18] UNVERIFIED - https://www.youtube.com/watch?v=_kQWYP5PwDw\n[19] UNVERIFIED - https://www.youtube.com/watch?v=Qr7XaFix0Ds\n[20] UNVERIFIED - https://community.spiceworks.com/t/lagging-and-slow-on-virtual-servers/203004\n[21] UNVERIFIED - https://www.mcleodsoftware.com/solutions/carrier-management/\n[22] UNVERIFIED - https://pubmed.ncbi.nlm.nih.gov/15203529/\n[23] UNVERIFIED - https://www.mcleodsoftware.com/who-we-serve/truckload-carriers/\n[24] UNVERIFIED - https://www.youtube.com/watch?v=LolfBut7_zs\n[25] UNVERIFIED - https://angusmcleod.com/mcleod-management-model/\n[26] PARTIAL - https://www.inteklogistics.com/blog/top-10-transportation-management-software-tms-implementation-pitfalls-to-avoid\n[27] UNVERIFIED - https://www.mcleodsoftware.com/who-we-serve/private-fleets/\n[28] UNVERIFIED - https://www.freightwaves.com/news/technology-mcleod-clients-discuss-order-lane-profitability-analysis-tools\n[29] UNVERIFIED - https://kb.samsara.com/hc/en-us/articles/360049126291-Integrate-with-McLeod-DocumentPower\n[30] UNVERIFIED - https://tetrate.io/learn/ai/mcp/implementation-best-practices\n[31] UNVERIFIED - https://lead.devclarity.ai/case-studies/mcleod\n[32] UNVERIFIED - https://www.mcleodsoftware.com/solutions/pricing-order-management/\n[33] PARTIAL - https://ninjadispatch.com/2025/05/30/mcleod-trained-dispatchers/\n[34] UNREACHABLE - https://www.ziprecruiter.com/co/Mcleod-Software/Jobs/Implementation-Consultant\n[35] UNVERIFIED - https://docs.rtafleet.com/rta-manual/load-master-interface/setting-up-load-master\n[36] UNVERIFIED - https://pubmed.ncbi.nlm.nih.gov/22111695/\n[37] UNVERIFIED - https://www.velosio.com/blog/go-live-effective-planning-and-cutover-controls/"
+}

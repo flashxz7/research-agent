@@ -1,25 +1,141 @@
-from fastapi import FastAPI, Request
+﻿# -*- coding: utf-8 -*-
+import hashlib
+import hmac
+import json
+import logging
 import os
+import time
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+from dotenv import load_dotenv
+from fastapi import BackgroundTasks, FastAPI, HTTPException, Request, Response
+from pydantic import BaseModel
+
+from linear_client import get_issue_labels
+from pipeline import run_research_pipeline
+
+load_dotenv()
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s  %(levelname)-8s  %(message)s",
+    datefmt="%H:%M:%S",
+)
+log = logging.getLogger(__name__)
+
+WEBHOOK_SECRET = os.getenv("LINEAR_WEBHOOK_SECRET", "")
+RESEARCH_LABEL = "research-agent"
+_active_jobs: set[str] = set()
+_recent_jobs: dict[str, float] = {}
+_RECENT_TTL_SECONDS = 600
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    os.makedirs("artifacts", exist_ok=True)
+    yield
+
+
+app = FastAPI(lifespan=lifespan)
+
+
+def _valid_signature(body: bytes, header: str) -> bool:
+    if not WEBHOOK_SECRET:
+        return True
+    digest = hmac.new(WEBHOOK_SECRET.encode(), body, hashlib.sha256).hexdigest()
+    return hmac.compare_digest(digest, header)
+
+
+def _fresh_timestamp(payload: dict, max_skew_seconds: int = 60) -> bool:
+    ts = payload.get("webhookTimestamp")
+    if ts is None:
+        return True
+    try:
+        ts_ms = int(ts)
+    except (TypeError, ValueError):
+        return True
+    now_ms = int(time.time() * 1000)
+    return abs(now_ms - ts_ms) <= max_skew_seconds * 1000
+
+
+def _seen_recent(issue_id: str) -> bool:
+    now = time.time()
+    expired = [key for key, ts in _recent_jobs.items() if now - ts > _RECENT_TTL_SECONDS]
+    for key in expired:
+        _recent_jobs.pop(key, None)
+    last_seen = _recent_jobs.get(issue_id)
+    if last_seen and (now - last_seen) < _RECENT_TTL_SECONDS:
+        return True
+    _recent_jobs[issue_id] = now
+    return False
+
+
+class ManualResearchRequest(BaseModel):
+    title: str
+    description: str = ""
+    issue_id: str = "manual-001"
+
 
 @app.get("/")
-def root():
-    return {"status": "research-agent running"}
+def health():
+    return {"status": "ok", "service": "research-agent"}
+
 
 @app.post("/webhooks/linear")
-async def linear_webhook(request: Request):
-    payload = await request.json()
+async def linear_webhook(request: Request, background_tasks: BackgroundTasks):
+    body = await request.body()
+    sig = request.headers.get("Linear-Signature") or request.headers.get(
+        "X-Linear-Signature", ""
+    )
 
-    print("\n--- LINEAR WEBHOOK RECEIVED ---")
-    print(payload)
+    if not _valid_signature(body, sig):
+        raise HTTPException(status_code=401, detail="Invalid signature")
 
-    # extract useful fields
+    payload = json.loads(body)
+    if not _fresh_timestamp(payload):
+        raise HTTPException(status_code=401, detail="Stale webhook timestamp")
+
+    if payload.get("type") != "Issue" or payload.get("action") not in ("create", "update"):
+        return Response(status_code=200)
+
     issue = payload.get("data", {})
-    title = issue.get("title")
-    description = issue.get("description")
+    issue_id = issue.get("id")
 
-    print("Issue title:", title)
-    print("Issue description:", description)
+    if not issue_id or issue_id in _active_jobs:
+        return Response(status_code=200)
 
-    return {"status": "received"}
+    labels = await get_issue_labels(issue_id)
+    if RESEARCH_LABEL not in labels:
+        return Response(status_code=200)
+    if _seen_recent(issue_id):
+        log.info("Skipping duplicate webhook  issue=%s", issue_id)
+        return Response(status_code=200)
+
+    log.info("Queuing research job  issue=%s  title=%r", issue_id, issue.get("title"))
+    _active_jobs.add(issue_id)
+    background_tasks.add_task(_run_and_release, issue_id, issue)
+
+    return Response(status_code=200)
+
+
+@app.post("/research")
+async def manual_research(body: ManualResearchRequest):
+    digest = await run_research_pipeline(
+        issue_id=body.issue_id,
+        title=body.title,
+        description=body.description,
+        post_to_linear=False,
+    )
+    return {"issue_id": body.issue_id, "digest": digest}
+
+
+async def _run_and_release(issue_id: str, issue: dict):
+    try:
+        await run_research_pipeline(
+            issue_id=issue_id,
+            title=issue.get("title", ""),
+            description=issue.get("description", ""),
+            post_to_linear=True,
+        )
+    finally:
+        _active_jobs.discard(issue_id)
