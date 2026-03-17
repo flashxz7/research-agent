@@ -147,7 +147,7 @@ async def manual_research(body: ManualResearchRequest):
 async def agent_stream(body: AgentStreamRequest):
     async def generate():
         try:
-            yield f"data: {json.dumps({'type': 'text', 'content': '🔍 Starting deep research — this takes 3-5 minutes...\\n\\n'})}\n\n"
+            yield f"data: {json.dumps({'type': 'text', 'content': 'Starting deep research...\\n\\n'})}\n\n"
 
             digest = await run_research_pipeline(
                 issue_id=body.conversation_id,
