@@ -9,6 +9,7 @@ from contextlib import asynccontextmanager
 
 from dotenv import load_dotenv
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Request, Response
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 
 from linear_client import get_issue_labels
@@ -70,11 +71,24 @@ def _seen_recent(issue_id: str) -> bool:
     return False
 
 
+# ── Models ────────────────────────────────────────────────────────────────────
+
 class ManualResearchRequest(BaseModel):
     title: str
     description: str = ""
     issue_id: str = "manual-001"
 
+
+class AgentStreamRequest(BaseModel):
+    message: str
+    conversation_id: str = "hemutchat"
+    user_email: str = ""
+    history: list = []
+    document_context: str = ""
+    researchMode: str = "extensive"
+
+
+# ── Routes ────────────────────────────────────────────────────────────────────
 
 @app.get("/")
 def health():
@@ -128,6 +142,47 @@ async def manual_research(body: ManualResearchRequest):
     )
     return {"issue_id": body.issue_id, "digest": digest}
 
+
+@app.post("/agent/stream")
+async def agent_stream(body: AgentStreamRequest):
+    async def generate():
+        try:
+            yield f"data: {json.dumps({'type': 'text', 'content': '🔍 Starting deep research — this takes 3-5 minutes...\\n\\n'})}\n\n"
+
+            digest = await run_research_pipeline(
+                issue_id=body.conversation_id,
+                title=body.message,
+                description="",
+                post_to_linear=False,
+            )
+
+            yield f"data: {json.dumps({'type': 'text', 'content': digest})}\n\n"
+            yield f"data: {json.dumps({'type': 'done', 'messageId': None})}\n\n"
+
+        except Exception as e:
+            log.error("agent_stream error: %s", e)
+            yield f"data: {json.dumps({'type': 'error', 'error': str(e)})}\n\n"
+            yield f"data: {json.dumps({'type': 'done', 'messageId': None})}\n\n"
+
+    return StreamingResponse(
+        generate(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
+
+
+@app.post("/agent/stop")
+async def agent_stop(body: dict):
+    conversation_id = body.get("conversation_id", "")
+    _active_jobs.discard(conversation_id)
+    return {"success": True, "message": "Agent stopped"}
+
+
+# ── Background task ───────────────────────────────────────────────────────────
 
 async def _run_and_release(issue_id: str, issue: dict):
     try:
