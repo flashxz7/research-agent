@@ -147,7 +147,8 @@ async def manual_research(body: ManualResearchRequest):
 async def agent_stream(body: AgentStreamRequest):
     async def generate():
         try:
-            yield f"data: {json.dumps({'type': 'text', 'content': 'Starting deep research...\\n\\n'})}\n\n"
+            start_msg = json.dumps({'type': 'text', 'content': 'Starting deep research...\n\n'})
+            yield f"data: {start_msg}\n\n"
 
             digest = await run_research_pipeline(
                 issue_id=body.conversation_id,
@@ -156,13 +157,18 @@ async def agent_stream(body: AgentStreamRequest):
                 post_to_linear=False,
             )
 
-            yield f"data: {json.dumps({'type': 'text', 'content': digest})}\n\n"
-            yield f"data: {json.dumps({'type': 'done', 'messageId': None})}\n\n"
+            result_msg = json.dumps({'type': 'text', 'content': digest})
+            yield f"data: {result_msg}\n\n"
+
+            done_msg = json.dumps({'type': 'done', 'messageId': None})
+            yield f"data: {done_msg}\n\n"
 
         except Exception as e:
             log.error("agent_stream error: %s", e)
-            yield f"data: {json.dumps({'type': 'error', 'error': str(e)})}\n\n"
-            yield f"data: {json.dumps({'type': 'done', 'messageId': None})}\n\n"
+            error_msg = json.dumps({'type': 'error', 'error': str(e)})
+            yield f"data: {error_msg}\n\n"
+            done_msg = json.dumps({'type': 'done', 'messageId': None})
+            yield f"data: {done_msg}\n\n"
 
     return StreamingResponse(
         generate(),
