@@ -29,18 +29,27 @@ async def run_research_pipeline(
     post_to_linear: bool = True,
     research_mode: str = "extensive",
 ) -> str:
-    log.info("Pipeline start  issue=%s  title=%r", issue_id, title)
+    log.info("Pipeline start  issue=%s  title=%r  mode=%s", issue_id, title, research_mode)
+
     normalized_mode = (research_mode or "extensive").strip().lower()
     if normalized_mode not in {"extensive", "concise", "list"}:
         log.warning("Unknown research mode %r; defaulting to extensive", research_mode)
         normalized_mode = "extensive"
 
+    # Step 1 — Classify
+    log.info("Step 1/7: Classifying issue  issue=%s", issue_id)
     classification = await classify_issue(title, description)
-    log.info("Classification  issue=%s  %s", issue_id, classification)
+    log.info("Step 1/7 complete  issue=%s  intent=%s", issue_id, classification.get("intent"))
 
+    # Step 2 — Build prompts
+    log.info("Step 2/7: Building prompts  issue=%s", issue_id)
     system_prompt, user_prompt = build_dynamic_prompt(classification, title, description)
+    log.info("Step 2/7 complete  issue=%s  prompt_chars=%d", issue_id, len(user_prompt))
+
     timeout_seconds = 660
 
+    # Step 3 — Perplexity deep research
+    log.info("Step 3/7: Calling Perplexity sonar-deep-research  issue=%s  timeout=%ds", issue_id, timeout_seconds)
     try:
         result = await run_deep_research(
             system_prompt,
@@ -48,28 +57,42 @@ async def run_research_pipeline(
             timeout_seconds=timeout_seconds,
         )
     except Exception as exc:
-        log.error("Perplexity failed  issue=%s  error=%s", issue_id, exc)
+        log.error("Step 3/7 FAILED  issue=%s  error=%s", issue_id, exc)
         message = f"Research could not be completed.\n\n`{exc}`"
         if post_to_linear and linear_enabled():
             await post_comment(issue_id, message)
         return message
 
+    log.info(
+        "Step 3/7 complete  issue=%s  chars=%d  citations=%d  tokens=%d",
+        issue_id,
+        len(result.content),
+        len(result.citations),
+        result.usage.get("total_tokens", 0),
+    )
+
     word_count = len(result.content.split())
-    if word_count < 2500:
-        log.warning(
-            "Perplexity output below minimum word count: %d words", word_count
-        )
-    if len(result.citations) < 12:
-        log.warning(
-            "Perplexity output below minimum citations: %d sources", len(result.citations)
-        )
+    if normalized_mode == "extensive":
+        if word_count < 2500:
+            log.warning("Output below minimum word count: %d words", word_count)
+        if len(result.citations) < 12:
+            log.warning("Output below minimum citations: %d sources", len(result.citations))
 
+    # Step 4 — Verification
+    log.info("Step 4/7: Running claim verification  issue=%s  citations=%d", issue_id, len(result.citations))
     verification = await asyncio.to_thread(verify_report, result.content, result.citations)
-    log.info("Verification complete  %s", verification.summary or "no claims found")
+    log.info(
+        "Step 4/7 complete  issue=%s  summary=%s",
+        issue_id,
+        verification.summary or "no claims found",
+    )
 
+    # Step 5 — Build verified report
+    log.info("Step 5/7: Building verified report  issue=%s", issue_id)
     intent = classification.get("intent", "market_research")
     if intent == "code_debug":
         base_report = result.content
+        log.info("Step 5/7 complete  issue=%s  using raw content (code_debug)", issue_id)
     else:
         base_report = build_verified_report(
             title=title,
@@ -77,7 +100,10 @@ async def run_research_pipeline(
             citation_urls=result.citations,
             classification=classification,
         )
+        log.info("Step 5/7 complete  issue=%s  report_chars=%d", issue_id, len(base_report))
 
+    # Step 6 — GPT-4o formatting
+    log.info("Step 6/7: Formatting digest with GPT-4o  issue=%s", issue_id)
     try:
         digest = await format_digest(
             report_text=base_report,
@@ -86,26 +112,32 @@ async def run_research_pipeline(
             classification=classification,
             raw_report=result.content,
         )
+        log.info("Step 6/7 complete  issue=%s  digest_chars=%d", issue_id, len(digest))
     except Exception as exc:
-        log.error("Formatting failed  issue=%s  error=%s", issue_id, exc)
+        log.error("Step 6/7 FAILED  issue=%s  error=%s", issue_id, exc)
         digest = base_report
 
+    # Step 6b — Compress for concise/list modes
     full_digest = digest
     if normalized_mode == "concise":
-        log.info("Compressing to concise format  issue=%s", issue_id)
+        log.info("Step 6b/7: Compressing to concise format  issue=%s", issue_id)
         try:
             digest = await compress_to_concise(full_digest)
+            log.info("Step 6b/7 complete  issue=%s  compressed_chars=%d", issue_id, len(digest))
         except Exception as exc:
-            log.error("Concise compression failed  issue=%s  error=%s", issue_id, exc)
+            log.error("Step 6b/7 FAILED  issue=%s  error=%s", issue_id, exc)
             digest = full_digest
     elif normalized_mode == "list":
-        log.info("Compressing to list format  issue=%s", issue_id)
+        log.info("Step 6b/7: Compressing to list format  issue=%s", issue_id)
         try:
             digest = await compress_to_list(full_digest)
+            log.info("Step 6b/7 complete  issue=%s  compressed_chars=%d", issue_id, len(digest))
         except Exception as exc:
-            log.error("List compression failed  issue=%s  error=%s", issue_id, exc)
+            log.error("Step 6b/7 FAILED  issue=%s  error=%s", issue_id, exc)
             digest = full_digest
 
+    # Step 7 — Save artifact and post to Linear
+    log.info("Step 7/7: Saving artifact  issue=%s", issue_id)
     _save_artifact(
         issue_id,
         title,
@@ -117,16 +149,19 @@ async def run_research_pipeline(
         classification,
         normalized_mode,
     )
+    log.info("Step 7/7 artifact saved  issue=%s", issue_id)
 
     if post_to_linear and linear_enabled():
+        log.info("Step 7/7: Posting to Linear  issue=%s", issue_id)
         posted = await post_comment(issue_id, digest)
         if posted:
-            log.info("Digest posted  issue=%s", issue_id)
+            log.info("Step 7/7 complete  issue=%s  posted to Linear successfully", issue_id)
         else:
-            log.error("Failed to post comment  issue=%s", issue_id)
+            log.error("Step 7/7 FAILED  issue=%s  Linear post returned false", issue_id)
     else:
-        log.info("Skipping Linear post for issue=%s", issue_id)
+        log.info("Step 7/7 complete  issue=%s  skipping Linear post", issue_id)
 
+    log.info("Pipeline complete  issue=%s  mode=%s  final_chars=%d", issue_id, normalized_mode, len(digest))
     return digest
 
 
