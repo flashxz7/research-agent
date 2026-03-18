@@ -77,6 +77,7 @@ class ManualResearchRequest(BaseModel):
     title: str
     description: str = ""
     issue_id: str = "manual-001"
+    researchMode: str = "extensive"
 
 
 class AgentStreamRequest(BaseModel):
@@ -139,6 +140,7 @@ async def manual_research(body: ManualResearchRequest):
         title=body.title,
         description=body.description,
         post_to_linear=False,
+        research_mode=body.researchMode,
     )
     return {"issue_id": body.issue_id, "digest": digest}
 
@@ -147,7 +149,14 @@ async def manual_research(body: ManualResearchRequest):
 async def agent_stream(body: AgentStreamRequest):
     async def generate():
         try:
-            start_msg = json.dumps({'type': 'text', 'content': 'Starting deep research...\n\n'})
+            if body.researchMode in ("concise", "list"):
+                status_text = (
+                    "Running deep research and compressing results - "
+                    "this takes 3-5 minutes...\n\n"
+                )
+            else:
+                status_text = "Starting deep research - this takes 3-5 minutes...\n\n"
+            start_msg = json.dumps({"type": "text", "content": status_text})
             yield f"data: {start_msg}\n\n"
 
             digest = await run_research_pipeline(
@@ -155,19 +164,20 @@ async def agent_stream(body: AgentStreamRequest):
                 title=body.message,
                 description="",
                 post_to_linear=False,
+                research_mode=body.researchMode,
             )
 
-            result_msg = json.dumps({'type': 'text', 'content': digest})
+            result_msg = json.dumps({"type": "text", "content": digest})
             yield f"data: {result_msg}\n\n"
 
-            done_msg = json.dumps({'type': 'done', 'messageId': None})
+            done_msg = json.dumps({"type": "done", "messageId": None})
             yield f"data: {done_msg}\n\n"
 
         except Exception as e:
             log.error("agent_stream error: %s", e)
-            error_msg = json.dumps({'type': 'error', 'error': str(e)})
+            error_msg = json.dumps({"type": "error", "error": str(e)})
             yield f"data: {error_msg}\n\n"
-            done_msg = json.dumps({'type': 'done', 'messageId': None})
+            done_msg = json.dumps({"type": "done", "messageId": None})
             yield f"data: {done_msg}\n\n"
 
     return StreamingResponse(

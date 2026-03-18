@@ -223,3 +223,102 @@ def _format_hint(output_format: str) -> str:
     if output_format == "definition_block":
         return "Keep it concise and definition-focused with a clear example."
     return "Use a clear narrative structure with minimal headings."
+
+
+async def compress_to_concise(full_digest: str) -> str:
+    """
+    Takes the full research digest and compresses it to the 3-5 most important
+    findings in 300-400 words. The full digest is stored separately for follow-up context.
+    """
+    if _client is None:
+        words = full_digest.split()
+        return " ".join(words[:400]) + "\n\n*[Full research stored for follow-up questions]*"
+
+    system = """\
+You are a research editor. Your job is to compress a full research report into a
+concise summary for a busy executive.
+
+Rules:
+- Extract only the 3-5 most important findings from the full report.
+- Total output must be 300-400 words maximum.
+- Each finding gets one short paragraph of 2-3 sentences.
+- Preserve all inline citation markers [N] exactly as they appear in the source.
+- Use ## headings for each finding.
+- End with a one-sentence ## Bottom Line that states the single most actionable insight.
+- Do not add any information not present in the source report.
+- Do not include a Sources section — citations are inline only.
+- Output raw Markdown only. No preamble, no meta-commentary.
+"""
+
+    user = (
+        "Compress this research report to the 3-5 most important findings "
+        "in 300-400 words:\n\n" + full_digest
+    )
+
+    try:
+        response = await _client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": user},
+            ],
+            temperature=0.1,
+            max_tokens=600,
+        )
+        compressed = (response.choices[0].message.content or "").strip()
+        if not compressed:
+            return full_digest
+        return compressed
+    except Exception as exc:
+        log.error("Concise compression failed: %s", exc)
+        return full_digest
+
+
+async def compress_to_list(full_digest: str) -> str:
+    """
+    Takes the full research digest and formats it as structured bullet points.
+    Designed for planning and workflow breakdown use cases.
+    The full digest is stored separately for follow-up context.
+    """
+    if _client is None:
+        words = full_digest.split()
+        return " ".join(words[:400]) + "\n\n*[Full research stored for follow-up questions]*"
+
+    system = """\
+You are a research editor. Your job is to convert a full research report into a
+structured bullet-point breakdown optimized for planning and workflow decisions.
+
+Rules:
+- Organize bullets under 3-4 ## headings that reflect actionable categories
+  (e.g. ## Key Facts, ## Trends to Watch, ## Implications, ## Open Questions).
+- Each bullet is one specific, concrete fact or insight — one sentence maximum.
+- Total bullets: 10-15. Each bullet must have an inline citation [N] if one exists
+  in the source for that fact.
+- No prose paragraphs between bullets. Headings and bullets only.
+- Do not add any information not present in the source report.
+- Do not include a Sources section.
+- Output raw Markdown only. No preamble, no meta-commentary.
+"""
+
+    user = (
+        "Convert this research report into a structured bullet-point breakdown "
+        "for planning and workflow decisions:\n\n" + full_digest
+    )
+
+    try:
+        response = await _client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user", "content": user},
+            ],
+            temperature=0.1,
+            max_tokens=800,
+        )
+        compressed = (response.choices[0].message.content or "").strip()
+        if not compressed:
+            return full_digest
+        return compressed
+    except Exception as exc:
+        log.error("List compression failed: %s", exc)
+        return full_digest

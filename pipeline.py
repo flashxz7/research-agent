@@ -5,7 +5,12 @@ import logging
 from datetime import datetime, timezone
 from pathlib import Path
 
-from formats import build_verified_report, format_digest
+from formats import (
+    build_verified_report,
+    compress_to_concise,
+    compress_to_list,
+    format_digest,
+)
 from linear_client import is_enabled as linear_enabled
 from linear_client import post_comment
 from perplexity_client import run_deep_research
@@ -22,8 +27,13 @@ async def run_research_pipeline(
     title: str,
     description: str,
     post_to_linear: bool = True,
+    research_mode: str = "extensive",
 ) -> str:
     log.info("Pipeline start  issue=%s  title=%r", issue_id, title)
+    normalized_mode = (research_mode or "extensive").strip().lower()
+    if normalized_mode not in {"extensive", "concise", "list"}:
+        log.warning("Unknown research mode %r; defaulting to extensive", research_mode)
+        normalized_mode = "extensive"
 
     classification = await classify_issue(title, description)
     log.info("Classification  issue=%s  %s", issue_id, classification)
@@ -80,7 +90,33 @@ async def run_research_pipeline(
         log.error("Formatting failed  issue=%s  error=%s", issue_id, exc)
         digest = base_report
 
-    _save_artifact(issue_id, title, result, verification, base_report, digest, classification)
+    full_digest = digest
+    if normalized_mode == "concise":
+        log.info("Compressing to concise format  issue=%s", issue_id)
+        try:
+            digest = await compress_to_concise(full_digest)
+        except Exception as exc:
+            log.error("Concise compression failed  issue=%s  error=%s", issue_id, exc)
+            digest = full_digest
+    elif normalized_mode == "list":
+        log.info("Compressing to list format  issue=%s", issue_id)
+        try:
+            digest = await compress_to_list(full_digest)
+        except Exception as exc:
+            log.error("List compression failed  issue=%s  error=%s", issue_id, exc)
+            digest = full_digest
+
+    _save_artifact(
+        issue_id,
+        title,
+        result,
+        verification,
+        base_report,
+        full_digest,
+        digest,
+        classification,
+        normalized_mode,
+    )
 
     if post_to_linear and linear_enabled():
         posted = await post_comment(issue_id, digest)
@@ -100,8 +136,10 @@ def _save_artifact(
     result,
     verification,
     report: str,
+    full_digest: str,
     digest: str,
     classification: dict,
+    research_mode: str,
 ) -> None:
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     path = _ARTIFACTS / f"{ts}_{issue_id}.json"
@@ -113,8 +151,10 @@ def _save_artifact(
         "citations": result.citations,
         "content": result.content,
         "classification": classification,
+        "research_mode": research_mode,
         "verification": verification.to_dict() if verification else None,
         "verified_report": report,
+        "full_digest": full_digest,
         "digest": digest,
     }
     path.write_text(json.dumps(payload, indent=2))
