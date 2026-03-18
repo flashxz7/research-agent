@@ -46,7 +46,13 @@ async def run_deep_research(
 
     log.info("Calling Perplexity sonar-deep-research (may take several minutes)")
 
-    timeout = httpx.Timeout(float(timeout_seconds), connect=10.0)
+    timeout = httpx.Timeout(
+        timeout=float(timeout_seconds),
+        connect=30.0,
+        read=float(timeout_seconds),
+        write=30.0,
+        pool=30.0,
+    )
     async with httpx.AsyncClient(timeout=timeout) as client:
         resp = await _post_with_retries(client, headers, payload)
 
