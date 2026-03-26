@@ -22,12 +22,18 @@ log = logging.getLogger(__name__)
 _ARTIFACTS = Path("artifacts")
 
 
+async def _emit(on_status, msg: str):
+    if on_status is not None:
+        await on_status(msg)
+
+
 async def run_research_pipeline(
     issue_id: str,
     title: str,
     description: str,
     post_to_linear: bool = True,
     research_mode: str = "extensive",
+    on_status=None,
 ) -> str:
     log.info("Pipeline start  issue=%s  title=%r  mode=%s", issue_id, title, research_mode)
 
@@ -37,11 +43,13 @@ async def run_research_pipeline(
         normalized_mode = "extensive"
 
     # Step 1 — Classify
+    await _emit(on_status, "Classifying query...")
     log.info("Step 1/7: Classifying issue  issue=%s", issue_id)
     classification = await classify_issue(title, description)
     log.info("Step 1/7 complete  issue=%s  intent=%s", issue_id, classification.get("intent"))
 
     # Step 2 — Build prompts
+    await _emit(on_status, "Building research prompts...")
     log.info("Step 2/7: Building prompts  issue=%s", issue_id)
     system_prompt, user_prompt = build_dynamic_prompt(classification, title, description)
     log.info("Step 2/7 complete  issue=%s  prompt_chars=%d", issue_id, len(user_prompt))
@@ -49,6 +57,7 @@ async def run_research_pipeline(
     timeout_seconds = 660
 
     # Step 3 — Perplexity deep research
+    await _emit(on_status, "Running deep research \u2014 this may take a few minutes...")
     log.info("Step 3/7: Calling Perplexity sonar-deep-research  issue=%s  timeout=%ds", issue_id, timeout_seconds)
     try:
         result = await run_deep_research(
@@ -79,6 +88,7 @@ async def run_research_pipeline(
             log.warning("Output below minimum citations: %d sources", len(result.citations))
 
     # Step 4 — Verification
+    await _emit(on_status, "Verifying claims against sources...")
     log.info("Step 4/7: Running claim verification  issue=%s  citations=%d", issue_id, len(result.citations))
     verification = await asyncio.to_thread(verify_report, result.content, result.citations)
     log.info(
@@ -88,6 +98,7 @@ async def run_research_pipeline(
     )
 
     # Step 5 — Build verified report
+    await _emit(on_status, "Building verified report...")
     log.info("Step 5/7: Building verified report  issue=%s", issue_id)
     intent = classification.get("intent", "market_research")
     if intent == "code_debug":
@@ -103,6 +114,7 @@ async def run_research_pipeline(
         log.info("Step 5/7 complete  issue=%s  report_chars=%d", issue_id, len(base_report))
 
     # Step 6 — GPT-4o formatting
+    await _emit(on_status, "Formatting results...")
     log.info("Step 6/7: Formatting digest with GPT-4o  issue=%s", issue_id)
     try:
         digest = await format_digest(
@@ -120,6 +132,7 @@ async def run_research_pipeline(
     # Step 6b — Compress for concise/list modes
     full_digest = digest
     if normalized_mode == "concise":
+        await _emit(on_status, "Compressing to concise format...")
         log.info("Step 6b/7: Compressing to concise format  issue=%s", issue_id)
         try:
             digest = await compress_to_concise(full_digest)
@@ -128,6 +141,7 @@ async def run_research_pipeline(
             log.error("Step 6b/7 FAILED  issue=%s  error=%s", issue_id, exc)
             digest = full_digest
     elif normalized_mode == "list":
+        await _emit(on_status, "Compressing to list format...")
         log.info("Step 6b/7: Compressing to list format  issue=%s", issue_id)
         try:
             digest = await compress_to_list(full_digest)

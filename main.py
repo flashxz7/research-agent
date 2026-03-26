@@ -1,4 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
+import asyncio
 import hashlib
 import hmac
 import json
@@ -148,24 +149,40 @@ async def manual_research(body: ManualResearchRequest):
 @app.post("/agent/stream")
 async def agent_stream(body: AgentStreamRequest):
     async def generate():
-        try:
-            if body.researchMode in ("concise", "list"):
-                status_text = (
-                    "Running deep research and compressing results - "
-                    "this takes 3-5 minutes...\n\n"
-                )
-            else:
-                status_text = "Starting deep research - this takes 3-5 minutes...\n\n"
-            start_msg = json.dumps({"type": "text", "content": status_text})
-            yield f"data: {start_msg}\n\n"
+        status_queue: asyncio.Queue[str | None] = asyncio.Queue()
 
-            digest = await run_research_pipeline(
-                issue_id=body.conversation_id,
-                title=body.message,
-                description="",
-                post_to_linear=False,
-                research_mode=body.researchMode,
-            )
+        async def on_status(msg: str):
+            await status_queue.put(msg)
+
+        async def run_pipeline():
+            try:
+                result = await run_research_pipeline(
+                    issue_id=body.conversation_id,
+                    title=body.message,
+                    description="",
+                    post_to_linear=False,
+                    research_mode=body.researchMode,
+                    on_status=on_status,
+                )
+                await status_queue.put(None)  # signal done
+                return result
+            except Exception as e:
+                await status_queue.put(None)
+                raise e
+
+        task = asyncio.create_task(run_pipeline())
+
+        # Yield status events as they arrive
+        while True:
+            msg = await status_queue.get()
+            if msg is None:
+                break
+            status_msg = json.dumps({"type": "status", "status": msg})
+            yield f"data: {status_msg}\n\n"
+
+        # Pipeline finished — get result or error
+        try:
+            digest = await task
 
             result_msg = json.dumps({"type": "text", "content": digest})
             yield f"data: {result_msg}\n\n"
