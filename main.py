@@ -11,10 +11,11 @@ from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Request, Response
 from fastapi.responses import StreamingResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from linear_client import get_issue_labels
-from pipeline import run_research_pipeline
+from pipeline import PipelineResult, run_research_pipeline
 
 load_dotenv()
 
@@ -26,6 +27,7 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 WEBHOOK_SECRET = os.getenv("LINEAR_WEBHOOK_SECRET", "")
+PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL", "http://localhost:8000").rstrip("/")
 RESEARCH_LABEL = "research-agent"
 _active_jobs: set[str] = set()
 _recent_jobs: dict[str, float] = {}
@@ -38,7 +40,9 @@ async def lifespan(app: FastAPI):
     yield
 
 
+os.makedirs("artifacts", exist_ok=True)
 app = FastAPI(lifespan=lifespan)
+app.mount("/artifacts", StaticFiles(directory="artifacts"), name="artifacts")
 
 
 def _valid_signature(body: bytes, header: str) -> bool:
@@ -136,14 +140,15 @@ async def linear_webhook(request: Request, background_tasks: BackgroundTasks):
 
 @app.post("/research")
 async def manual_research(body: ManualResearchRequest):
-    digest = await run_research_pipeline(
+    result = await run_research_pipeline(
         issue_id=body.issue_id,
         title=body.title,
         description=body.description,
         post_to_linear=False,
         research_mode=body.researchMode,
     )
-    return {"issue_id": body.issue_id, "digest": digest}
+    pdf_url = f"{PUBLIC_BASE_URL}/artifacts/{result.pdf_path.name}" if result.pdf_path else None
+    return {"issue_id": body.issue_id, "digest": result.digest, "pdf_url": pdf_url}
 
 
 @app.post("/agent/stream")
@@ -154,7 +159,7 @@ async def agent_stream(body: AgentStreamRequest):
         async def on_status(msg: str):
             await status_queue.put(msg)
 
-        async def run_pipeline():
+        async def run_pipeline() -> PipelineResult:
             try:
                 result = await run_research_pipeline(
                     issue_id=body.conversation_id,
@@ -182,10 +187,15 @@ async def agent_stream(body: AgentStreamRequest):
 
         # Pipeline finished — get result or error
         try:
-            digest = await task
+            result = await task
 
-            result_msg = json.dumps({"type": "text", "content": digest})
+            result_msg = json.dumps({"type": "text", "content": result.digest})
             yield f"data: {result_msg}\n\n"
+
+            if result.pdf_path is not None:
+                pdf_url = f"{PUBLIC_BASE_URL}/artifacts/{result.pdf_path.name}"
+                pdf_msg = json.dumps({"type": "pdf", "url": pdf_url})
+                yield f"data: {pdf_msg}\n\n"
 
             done_msg = json.dumps({"type": "done", "messageId": None})
             yield f"data: {done_msg}\n\n"

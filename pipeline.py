@@ -2,6 +2,7 @@
 import asyncio
 import json
 import logging
+from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -13,9 +14,16 @@ from formats import (
 )
 from linear_client import is_enabled as linear_enabled
 from linear_client import post_comment
+from pdf_report import generate_report_pdf
 from perplexity_client import run_deep_research
 from prompts import build_dynamic_prompt, classify_issue
 from verification import verify_report
+
+
+@dataclass
+class PipelineResult:
+    digest: str
+    pdf_path: Path | None = None
 
 log = logging.getLogger(__name__)
 
@@ -34,7 +42,7 @@ async def run_research_pipeline(
     post_to_linear: bool = True,
     research_mode: str = "extensive",
     on_status=None,
-) -> str:
+) -> PipelineResult:
     log.info("Pipeline start  issue=%s  title=%r  mode=%s", issue_id, title, research_mode)
 
     normalized_mode = (research_mode or "extensive").strip().lower()
@@ -70,7 +78,7 @@ async def run_research_pipeline(
         message = f"Research could not be completed.\n\n`{exc}`"
         if post_to_linear and linear_enabled():
             await post_comment(issue_id, message)
-        return message
+        return PipelineResult(digest=message)
 
     log.info(
         "Step 3/7 complete  issue=%s  chars=%d  citations=%d  tokens=%d",
@@ -150,6 +158,20 @@ async def run_research_pipeline(
             log.error("Step 6b/7 FAILED  issue=%s  error=%s", issue_id, exc)
             digest = full_digest
 
+    # Step 6c — Generate branded PDF (always uses full_digest, never compressed)
+    pdf_path: Path | None = None
+    await _emit(on_status, "Generating PDF report...")
+    log.info("Step 6c/7: Generating PDF  issue=%s", issue_id)
+    ts_pdf = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    pdf_output = _ARTIFACTS / f"{ts_pdf}_{issue_id}.pdf"
+    try:
+        generate_report_pdf(title, full_digest, pdf_output)
+        pdf_path = pdf_output
+        log.info("Step 6c/7 complete  issue=%s  pdf=%s", issue_id, pdf_path.name)
+    except Exception as exc:
+        log.error("Step 6c/7 FAILED (PDF generation)  issue=%s  error=%s", issue_id, exc)
+        # PDF failure is non-fatal — research result is still returned
+
     # Step 7 — Save artifact and post to Linear
     log.info("Step 7/7: Saving artifact  issue=%s", issue_id)
     _save_artifact(
@@ -162,6 +184,7 @@ async def run_research_pipeline(
         digest,
         classification,
         normalized_mode,
+        pdf_path,
     )
     log.info("Step 7/7 artifact saved  issue=%s", issue_id)
 
@@ -176,7 +199,7 @@ async def run_research_pipeline(
         log.info("Step 7/7 complete  issue=%s  skipping Linear post", issue_id)
 
     log.info("Pipeline complete  issue=%s  mode=%s  final_chars=%d", issue_id, normalized_mode, len(digest))
-    return digest
+    return PipelineResult(digest=digest, pdf_path=pdf_path)
 
 
 def _save_artifact(
@@ -189,6 +212,7 @@ def _save_artifact(
     digest: str,
     classification: dict,
     research_mode: str,
+    pdf_path: Path | None = None,
 ) -> None:
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     path = _ARTIFACTS / f"{ts}_{issue_id}.json"
@@ -205,6 +229,7 @@ def _save_artifact(
         "verified_report": report,
         "full_digest": full_digest,
         "digest": digest,
+        "pdf_path": str(pdf_path) if pdf_path else None,
     }
     path.write_text(json.dumps(payload, indent=2))
     log.info("Artifact saved  path=%s", path)

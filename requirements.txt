@@ -6,3 +6,6 @@ requests
 beautifulsoup4
 lxml
 openai
+reportlab
+PyMuPDF
+Pillow
