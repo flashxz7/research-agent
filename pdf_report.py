@@ -21,6 +21,7 @@ from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import (
+    HRFlowable,
     PageBreak,
     Paragraph,
     SimpleDocTemplate,
@@ -90,10 +91,32 @@ def _md_to_xml(text: str) -> str:
     return text
 
 
+def _preprocess_digest(text: str) -> str:
+    """
+    1. Strip the Verification Notes block (and the --- divider before it).
+    2. Move the Sources section to the very end of the document.
+    """
+    # Remove "---\n\n## Verification Notes ..." footer block (with or without ---)
+    text = re.sub(r'\n?---\s*\n+#{1,3}\s+Verification Notes[\s\S]*$', '', text)
+    # Also catch Verification Notes without a preceding --- divider
+    text = re.sub(r'\n#{1,3}\s+Verification Notes[\s\S]*$', '', text)
+
+    # Extract Sources section and move to the very end
+    src_pat = re.compile(r'\n(#{2,3}\s+Sources\b[^\n]*\n)([\s\S]*?)(?=\n#{2,3}\s+|\Z)')
+    m = src_pat.search(text)
+    if m:
+        sources_heading = m.group(1)
+        sources_body = m.group(2)
+        text = text[:m.start()] + text[m.end():]
+        text = text.rstrip() + '\n\n' + sources_heading + sources_body.rstrip()
+
+    return text.strip()
+
+
 def _parse_markdown(text: str) -> list[dict]:
     """
     Parse full_digest markdown into tokens.
-    Token types: "h2", "h3", "bullet", "para"
+    Token types: "h2", "h3", "bullet", "rule", "para"
 
     Any leading '# Title' line is skipped — the title is rendered separately
     via the `title` argument passed to generate_report_pdf().
@@ -109,6 +132,8 @@ def _parse_markdown(text: str) -> list[dict]:
             tokens.append({"type": "h3", "text": s[4:].strip()})
         elif s.startswith("- ") or s.startswith("* "):
             tokens.append({"type": "bullet", "text": s[2:].strip()})
+        elif s == "---":
+            tokens.append({"type": "rule"})
         elif s:
             tokens.append({"type": "para", "text": s})
         # blank lines: skip (spacing handled via spaceBefore / spaceAfter)
@@ -176,7 +201,7 @@ def _draw_cover(canvas, doc):
     canvas.setFillColor(BLACK)
     canvas.rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT, fill=1, stroke=0)
 
-    # Large centered logo watermark (full yellow)
+    # Large yellow logo watermark — centered on page
     if LOGO.exists():
         logo_size = PAGE_WIDTH * 0.8
         logo_x = (PAGE_WIDTH - logo_size) / 2
@@ -200,7 +225,7 @@ def _draw_cover(canvas, doc):
                 mask="auto",
             )
 
-    # Small logo + "Hemut" wordmark — top-left
+    # Small logo + "Hemut" wordmark — top-left, tinted WHITE (visible on black bg)
     logo_small = 0.5 * inch
     logo_x_small = MARGIN_X
     logo_y_small = PAGE_HEIGHT - 1.17 * inch
@@ -208,12 +233,24 @@ def _draw_cover(canvas, doc):
     wordmark_x = logo_x_small + logo_small + 0.18 * inch
     wordmark_y = logo_y_small + (logo_small - (wordmark_font_size * 0.72)) / 2
     if LOGO.exists():
-        canvas.drawImage(
-            ImageReader(str(LOGO)),
-            logo_x_small, logo_y_small,
-            width=logo_small, height=logo_small,
-            mask="auto",
-        )
+        try:
+            from PIL import Image
+            img = Image.open(str(LOGO)).convert("RGBA")
+            yellow_small = Image.new("RGBA", img.size, (246, 212, 75, 255))
+            yellow_small.putalpha(img.split()[3])
+            canvas.drawImage(
+                ImageReader(yellow_small),
+                logo_x_small, logo_y_small,
+                width=logo_small, height=logo_small,
+                mask="auto",
+            )
+        except Exception:
+            canvas.drawImage(
+                ImageReader(str(LOGO)),
+                logo_x_small, logo_y_small,
+                width=logo_small, height=logo_small,
+                mask="auto",
+            )
     canvas.setFillColor(WHITE)
     canvas.setFont(FONT_BOLD, wordmark_font_size)
     canvas.drawString(wordmark_x, wordmark_y, "Hemut")
@@ -238,19 +275,32 @@ def _draw_cover(canvas, doc):
 
 
 def _draw_content_page(canvas, doc):
-    """TOC and body pages: white bg, small logo icon top-right only."""
+    """TOC and body pages: white bg, small yellow logo icon top-right."""
     canvas.saveState()
     canvas.setFillColor(WHITE)
     canvas.rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT, fill=1, stroke=0)
     if LOGO.exists():
         size = 0.28 * inch
-        canvas.drawImage(
-            ImageReader(str(LOGO)),
-            PAGE_WIDTH - MARGIN_X - size,
-            PAGE_HEIGHT - MARGIN_Y + 0.08 * inch,
-            width=size, height=size,
-            mask="auto",
-        )
+        try:
+            from PIL import Image
+            img = Image.open(str(LOGO)).convert("RGBA")
+            yellow_img = Image.new("RGBA", img.size, (246, 212, 75, 255))
+            yellow_img.putalpha(img.split()[3])
+            canvas.drawImage(
+                ImageReader(yellow_img),
+                PAGE_WIDTH - MARGIN_X - size,
+                PAGE_HEIGHT - MARGIN_Y + 0.08 * inch,
+                width=size, height=size,
+                mask="auto",
+            )
+        except Exception:
+            canvas.drawImage(
+                ImageReader(str(LOGO)),
+                PAGE_WIDTH - MARGIN_X - size,
+                PAGE_HEIGHT - MARGIN_Y + 0.08 * inch,
+                width=size, height=size,
+                mask="auto",
+            )
     canvas.restoreState()
 
 
@@ -278,6 +328,12 @@ def _build_body_story(report_title: str, tokens: list[dict], styles: dict) -> li
 
     for token in tokens:
         t = token["type"]
+
+        if t == "rule":
+            story.append(HRFlowable(width="100%", thickness=0.5, color=GRAY,
+                                    spaceBefore=6, spaceAfter=6))
+            continue
+
         text = _md_to_xml(token["text"])
 
         if t == "h2":
@@ -423,7 +479,8 @@ def generate_report_pdf(title: str, full_digest: str, output_path: Path) -> Path
     """
     _register_fonts()
 
-    tokens = _parse_markdown(full_digest)
+    cleaned = _preprocess_digest(full_digest)
+    tokens = _parse_markdown(cleaned)
     styles = _build_styles()
     story = _build_body_story(title, tokens, styles)
 
