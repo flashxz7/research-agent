@@ -30,8 +30,9 @@ Non-negotiable rules:
 - Keep the output comprehensive and decision-ready, not generic.
 - Do not add recommendations or action items.
 - The only sections permitted are: Executive Summary, Key Findings, Supporting Detail,
-  Gaps & Uncertainty, Sources — plus Sub-Question Coverage and What This Means for Hemut
+  Gaps & Uncertainty — plus Sub-Question Coverage and What This Means for Hemut
   where applicable.
+- Do NOT include a Sources section — sources will be appended separately.
 - Avoid rigid templates; use headings only when they add clarity.
 - Output raw Markdown only. No preamble, no meta-commentary, no closing note.
 """
@@ -88,6 +89,33 @@ def build_verified_report(
     return "\n".join(lines).strip()
 
 
+def _extract_and_strip_sources(text: str) -> tuple[str, str]:
+    """
+    Remove the Sources section from text and return (text_without_sources, sources_block).
+    sources_block is a clean markdown string starting with '## Sources\\n'.
+    """
+    pat = re.compile(r'\n(#{2,3}\s+Sources\b[^\n]*\n)([\s\S]*?)(?=\n#{2,3}\s+|\Z)')
+    m = pat.search(text)
+    if m:
+        heading = m.group(1).strip()
+        body = m.group(2).strip()
+        stripped = (text[:m.start()] + text[m.end():]).strip()
+        sources_block = f"{heading}\n{body}" if body else heading
+        return stripped, sources_block
+    return text.strip(), ""
+
+
+def _build_sources_block(citation_urls: list[str], verification: VerificationReport) -> str:
+    """Build a clean Sources section with all cited URLs as [N] url lines."""
+    lines = ["## Sources", ""]
+    used_indices = verification.used_citation_indices()
+    indices_to_use = used_indices if used_indices else list(range(1, len(citation_urls) + 1))
+    for i in indices_to_use:
+        if 1 <= i <= len(citation_urls):
+            lines.append(f"[{i}] {citation_urls[i - 1]}")
+    return "\n".join(lines)
+
+
 async def format_digest(
     report_text: str,
     verification: VerificationReport,
@@ -98,9 +126,17 @@ async def format_digest(
     output_format = classification.get("output_format", "narrative")
     depth = classification.get("depth", "deep")
 
+    # Always build the authoritative sources block from citation_urls
+    sources_block = _build_sources_block(citation_urls, verification)
+
     if _client is None:
-        footer = build_verification_footer(verification, citation_urls)
-        return f"{report_text}\n\n---\n\n{footer}"
+        return f"{report_text}\n\n{sources_block}"
+
+    # Strip any existing Sources section before sending to GPT-4o so it can't
+    # scatter, duplicate, or reformat them
+    report_for_gpt, _ = _extract_and_strip_sources(report_text)
+    # Also strip Verification Notes footer
+    report_for_gpt = re.sub(r'\n?---\s*\n+#{1,3}\s+Verification Notes[\s\S]*$', '', report_for_gpt).strip()
 
     format_hint = _format_hint(output_format)
     user_content = (
@@ -108,8 +144,9 @@ async def format_digest(
         "Reformat the report below into a complete, readable answer.\n"
         "Use only the claims contained in the input report.\n"
         "If the input contains [UNVERIFIED] tags, keep the claim but add a brief\n"
-        "caution phrase such as 'could not be independently confirmed'.\n\n"
-        f"{report_text}"
+        "caution phrase such as 'could not be independently confirmed'.\n"
+        "Do NOT include a Sources section — it will be appended automatically.\n\n"
+        f"{report_for_gpt}"
     )
 
     response = await _client.chat.completions.create(
@@ -119,21 +156,24 @@ async def format_digest(
             {"role": "user", "content": user_content},
         ],
         temperature=0.2,
-        max_tokens=4096,
+        max_tokens=16000,
     )
 
     formatted = (response.choices[0].message.content or "").strip()
     if not formatted:
-        formatted = report_text.strip()
+        formatted = report_for_gpt
+
+    # Strip any Sources section GPT-4o may have added despite instructions
+    formatted, _ = _extract_and_strip_sources(formatted)
 
     if depth == "deep" and len(formatted.split()) < _MIN_DEEP_WORDS:
         log.warning("Formatted output too short for deep request; returning raw report")
         fallback = raw_report or report_text
-        footer = build_verification_footer(verification, citation_urls)
-        return f"{fallback}\n\n---\n\n{footer}"
+        fallback, _ = _extract_and_strip_sources(fallback)
+        fallback = re.sub(r'\n?---\s*\n+#{1,3}\s+Verification Notes[\s\S]*$', '', fallback).strip()
+        return f"{fallback}\n\n{sources_block}"
 
-    footer = build_verification_footer(verification, citation_urls)
-    return f"{formatted}\n\n---\n\n{footer}"
+    return f"{formatted}\n\n{sources_block}"
 
 
 def build_verification_footer(
