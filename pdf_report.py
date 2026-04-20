@@ -27,8 +27,6 @@ from reportlab.platypus import (
     Paragraph,
     SimpleDocTemplate,
     Spacer,
-    Table,
-    TableStyle,
 )
 
 
@@ -73,6 +71,43 @@ FONT_ITALIC  = "Helvetica-Oblique"
 
 _FONTS_REGISTERED = False
 
+# Cached yellow-tinted logo (loaded once, reused on every page)
+_YELLOW_LOGO: "ImageReader | None" = None
+_YELLOW_LOGO_LOADED = False
+
+
+def _get_yellow_logo() -> "ImageReader | None":
+    """Return a yellow-tinted ImageReader for the Hemut logo, cached after first load."""
+    global _YELLOW_LOGO, _YELLOW_LOGO_LOADED
+    if _YELLOW_LOGO_LOADED:
+        return _YELLOW_LOGO
+    _YELLOW_LOGO_LOADED = True
+    if not LOGO.exists():
+        log.warning("Logo file not found: %s", LOGO)
+        return None
+    try:
+        from PIL import Image
+        img = Image.open(str(LOGO))
+        # Normalise to RGBA so we always have an alpha channel
+        if img.mode == "RGBA":
+            pass
+        elif img.mode in ("RGB", "L", "P"):
+            img = img.convert("RGBA")
+        else:
+            img = img.convert("RGBA")
+        r_ch, g_ch, b_ch, alpha = img.split()
+        # Replace colour channels with Hemut yellow (#F6D44B = 246, 212, 75)
+        yr = Image.new("L", img.size, 246)
+        yg = Image.new("L", img.size, 212)
+        yb = Image.new("L", img.size, 75)
+        yellow = Image.merge("RGBA", (yr, yg, yb, alpha))
+        _YELLOW_LOGO = ImageReader(yellow)
+        log.info("Logo tinted yellow successfully")
+        return _YELLOW_LOGO
+    except Exception as exc:
+        log.warning("Logo yellow-tint failed: %s", exc)
+        return None
+
 
 # ── Font registration ──────────────────────────────────────────────────────────
 
@@ -84,15 +119,24 @@ def _register_fonts() -> None:
         try:
             pdfmetrics.registerFont(TTFont("Inter", str(_INTER_REGULAR)))
             pdfmetrics.registerFont(TTFont("Inter-Bold", str(_INTER_BOLD)))
+            italic_name = "Inter"
             if _INTER_ITALIC.exists():
                 pdfmetrics.registerFont(TTFont("Inter-Italic", str(_INTER_ITALIC)))
-                FONT_REGULAR, FONT_BOLD, FONT_ITALIC = "Inter", "Inter-Bold", "Inter-Italic"
-            else:
-                FONT_REGULAR, FONT_BOLD, FONT_ITALIC = "Inter", "Inter-Bold", "Inter"
+                italic_name = "Inter-Italic"
+            pdfmetrics.registerFontFamily(
+                "Inter",
+                normal="Inter",
+                bold="Inter-Bold",
+                italic=italic_name,
+                boldItalic="Inter-Bold",
+            )
+            FONT_REGULAR, FONT_BOLD, FONT_ITALIC = "Inter", "Inter-Bold", italic_name
+            log.info("Inter font loaded successfully (italic=%s)", italic_name)
         except Exception as exc:
-            log.warning("Inter font registration failed, using Helvetica: %s", exc)
+            log.warning("Inter font registration failed, falling back to Helvetica: %s", exc)
             FONT_REGULAR, FONT_BOLD, FONT_ITALIC = "Helvetica", "Helvetica-Bold", "Helvetica-Oblique"
     else:
+        log.warning("Inter font files not found at %s — using Helvetica", _FONT_DIR)
         FONT_REGULAR, FONT_BOLD, FONT_ITALIC = "Helvetica", "Helvetica-Bold", "Helvetica-Oblique"
     _FONTS_REGISTERED = True
 
@@ -122,10 +166,16 @@ def _md_to_xml(text: str, style_citations: bool = False) -> str:
 
 def _preprocess_digest(text: str) -> str:
     """
-    1. Strip the Verification Notes block (and the --- divider before it).
-    2. Strip any inline [UNVERIFIED] / [PARTIAL] / [SOURCE_UNREACHABLE] verification tags.
-    3. Move the Sources section to the very end of the document.
+    1. Strip Perplexity <think>…</think> blocks and any echoed prompt before them.
+    2. Strip the Verification Notes block (and the --- divider before it).
+    3. Strip any inline [UNVERIFIED] / [PARTIAL] / [SOURCE_UNREACHABLE] verification tags.
+    4. Move the Sources section to the very end of the document.
     """
+    # Strip echoed prompt + think block (everything up to and including </think>)
+    if "<think>" in text.lower():
+        text = re.sub(r"^[\s\S]*?</think>\s*", "", text, flags=re.IGNORECASE)
+        text = re.sub(r"<think>[\s\S]*?</think>", "", text, flags=re.IGNORECASE)
+
     # Remove "---\n\n## Verification Notes ..." footer block
     text = re.sub(r'\n?---\s*\n+#{1,3}\s+Verification Notes[\s\S]*$', '', text)
     text = re.sub(r'\n#{1,3}\s+Verification Notes[\s\S]*$', '', text)
@@ -248,82 +298,63 @@ def _build_styles() -> dict[str, ParagraphStyle]:
 # ── Canvas page callbacks ──────────────────────────────────────────────────────
 
 def _draw_cover(canvas, doc, title: str = ""):
-    """Cover page: black bg, large centered logo watermark, title text."""
+    """Cover page: black bg, large yellow logo watermark (lower), title text overlaid top-left."""
     canvas.saveState()
 
-    # Black background
+    # ── Black background ──────────────────────────────────────────────────────
     canvas.setFillColor(BLACK)
     canvas.rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT, fill=1, stroke=0)
 
-    # Large yellow logo watermark — centered on page
-    if LOGO.exists():
-        logo_size = PAGE_WIDTH * 0.78
-        logo_x = (PAGE_WIDTH - logo_size) / 2
-        logo_y = (PAGE_HEIGHT - logo_size) / 2
-        try:
-            from PIL import Image
-            img = Image.open(str(LOGO)).convert("RGBA")
-            yellow_img = Image.new("RGBA", img.size, (246, 212, 75, 255))
-            yellow_img.putalpha(img.split()[3])
-            canvas.drawImage(
-                ImageReader(yellow_img),
-                logo_x, logo_y,
-                width=logo_size, height=logo_size,
-                mask="auto",
-            )
-        except Exception:
-            canvas.drawImage(
-                ImageReader(str(LOGO)),
-                logo_x, logo_y,
-                width=logo_size, height=logo_size,
-                mask="auto",
-            )
+    # ── Large yellow logo watermark — lower-centre, large, text overlaid on top ─
+    yellow_logo = _get_yellow_logo()
+    logo_size = PAGE_HEIGHT * 0.80          # tall enough to dominate lower half
+    logo_x = (PAGE_WIDTH - logo_size) / 2  # horizontally centred
+    logo_y = -PAGE_HEIGHT * 0.04           # slight bleed off the bottom edge
+    if yellow_logo is not None:
+        canvas.drawImage(
+            yellow_logo,
+            logo_x, logo_y,
+            width=logo_size, height=logo_size,
+            mask="auto",
+        )
+    elif LOGO.exists():
+        canvas.drawImage(
+            ImageReader(str(LOGO)),
+            logo_x, logo_y,
+            width=logo_size, height=logo_size,
+            mask="auto",
+        )
 
-    # Small logo + "Hemut" wordmark — top-left
-    logo_small = 0.48 * inch
-    logo_x_small = MARGIN_X
-    logo_y_small = PAGE_HEIGHT - 1.15 * inch
-    wordmark_font_size = 17
-    wordmark_x = logo_x_small + logo_small + 0.16 * inch
-    wordmark_y = logo_y_small + (logo_small - (wordmark_font_size * 0.72)) / 2
-    if LOGO.exists():
-        try:
-            from PIL import Image
-            img = Image.open(str(LOGO)).convert("RGBA")
-            yellow_small = Image.new("RGBA", img.size, (246, 212, 75, 255))
-            yellow_small.putalpha(img.split()[3])
-            canvas.drawImage(
-                ImageReader(yellow_small),
-                logo_x_small, logo_y_small,
-                width=logo_small, height=logo_small,
-                mask="auto",
-            )
-        except Exception:
-            canvas.drawImage(
-                ImageReader(str(LOGO)),
-                logo_x_small, logo_y_small,
-                width=logo_small, height=logo_small,
-                mask="auto",
-            )
+    # ── Small logo icon + "Hemut" wordmark — top-left ─────────────────────────
+    icon_size = 0.46 * inch
+    icon_x = MARGIN_X
+    icon_y = PAGE_HEIGHT - 1.1 * inch
+    wm_font_sz = 16
+    wm_x = icon_x + icon_size + 0.14 * inch
+    wm_y = icon_y + (icon_size - wm_font_sz * 0.72) / 2
+    if yellow_logo is not None:
+        canvas.drawImage(yellow_logo, icon_x, icon_y,
+                         width=icon_size, height=icon_size, mask="auto")
+    elif LOGO.exists():
+        canvas.drawImage(ImageReader(str(LOGO)), icon_x, icon_y,
+                         width=icon_size, height=icon_size, mask="auto")
     canvas.setFillColor(WHITE)
-    canvas.setFont(FONT_BOLD, wordmark_font_size)
-    canvas.drawString(wordmark_x, wordmark_y, "Hemut")
+    canvas.setFont(FONT_BOLD, wm_font_sz)
+    canvas.drawString(wm_x, wm_y, "Hemut")
 
-    # "Deep Research" (white) + "Report" (yellow) — large headline
+    # ── "Deep Research" (white) + "Report" (yellow) headline ─────────────────
     canvas.setFillColor(WHITE)
-    canvas.setFont(FONT_BOLD, 38)
-    canvas.drawString(MARGIN_X, PAGE_HEIGHT - 2.35 * inch, "Deep Research")
+    canvas.setFont(FONT_BOLD, 42)
+    canvas.drawString(MARGIN_X, PAGE_HEIGHT - 2.30 * inch, "Deep Research")
     canvas.setFillColor(YELLOW)
-    canvas.drawString(MARGIN_X, PAGE_HEIGHT - 2.95 * inch, "Report")
+    canvas.setFont(FONT_BOLD, 42)
+    canvas.drawString(MARGIN_X, PAGE_HEIGHT - 2.98 * inch, "Report")
 
-    # Generated date
+    # ── Generated date ─────────────────────────────────────────────────────────
     canvas.setFillColor(HexColor("#AAAAAA"))
-    canvas.setFont(FONT_REGULAR, 12)
-    canvas.drawString(
-        MARGIN_X,
-        PAGE_HEIGHT - 3.55 * inch,
-        f"Generated {date.today().isoformat()}",
-    )
+    canvas.setFont(FONT_REGULAR, 11.5)
+    canvas.drawString(MARGIN_X, PAGE_HEIGHT - 3.62 * inch,
+                      f"Generated {date.today().isoformat()}")
 
     canvas.restoreState()
 
@@ -335,28 +366,14 @@ def _draw_content_page(canvas, doc):
     canvas.rect(0, 0, PAGE_WIDTH, PAGE_HEIGHT, fill=1, stroke=0)
 
     # Small yellow logo — top-right
-    if LOGO.exists():
-        size = 0.28 * inch
-        try:
-            from PIL import Image
-            img = Image.open(str(LOGO)).convert("RGBA")
-            yellow_img = Image.new("RGBA", img.size, (246, 212, 75, 255))
-            yellow_img.putalpha(img.split()[3])
-            canvas.drawImage(
-                ImageReader(yellow_img),
-                PAGE_WIDTH - MARGIN_X - size,
-                PAGE_HEIGHT - MARGIN_Y + 0.08 * inch,
-                width=size, height=size,
-                mask="auto",
-            )
-        except Exception:
-            canvas.drawImage(
-                ImageReader(str(LOGO)),
-                PAGE_WIDTH - MARGIN_X - size,
-                PAGE_HEIGHT - MARGIN_Y + 0.08 * inch,
-                width=size, height=size,
-                mask="auto",
-            )
+    yellow_logo = _get_yellow_logo()
+    size = 0.28 * inch
+    lx = PAGE_WIDTH - MARGIN_X - size
+    ly = PAGE_HEIGHT - MARGIN_Y + 0.08 * inch
+    if yellow_logo is not None:
+        canvas.drawImage(yellow_logo, lx, ly, width=size, height=size, mask="auto")
+    elif LOGO.exists():
+        canvas.drawImage(ImageReader(str(LOGO)), lx, ly, width=size, height=size, mask="auto")
 
     # Page number — bottom center
     page_num = canvas.getPageNumber()
@@ -514,6 +531,87 @@ def _render_source_line(text: str) -> str | None:
     return None
 
 
+# ── TOC entry flowable with dot leaders ───────────────────────────────────────
+
+class _TocEntry(Flowable):
+    """
+    A single Table-of-Contents row rendered at canvas level so we can draw
+    precise dot leaders between the title and the page number.
+
+    Layout:  [num]  title text ·····················  page
+    """
+    _DOT_R   = 0.85   # dot radius in points
+    _DOT_GAP = 4.8    # centre-to-centre spacing between dots
+
+    def __init__(self, num: str, title: str, page: str, is_sub: bool = False):
+        super().__init__()
+        self._num   = num    # e.g. "3." or "" for sub-entries
+        self._title = title
+        self._page  = page
+        self._is_sub = is_sub
+        # Heights include bottom breathing room
+        self.width  = 0
+        self.height = 20 if is_sub else 28
+
+    def wrap(self, availWidth, availHeight):
+        self.width = availWidth
+        return (self.width, self.height)
+
+    def draw(self):
+        c = self.canv
+        sub  = self._is_sub
+        fsz  = 9.5 if sub else 11.0
+        indent = 20.0 if sub else 0.0
+
+        num_font   = FONT_REGULAR if sub else FONT_BOLD
+        title_font = FONT_REGULAR if sub else FONT_BOLD
+        num_col    = GRAY         if sub else YELLOW
+        text_col   = GRAY         if sub else CHARCOAL
+
+        # Vertical baseline — centre text within row height
+        y = (self.height - fsz) / 2
+
+        # ── Number prefix ────────────────────────────────────────────────────
+        x = indent
+        if self._num:
+            c.setFillColor(num_col)
+            c.setFont(num_font, fsz)
+            num_str = self._num + "\u2002"   # en-space after number
+            num_w   = c.stringWidth(num_str, num_font, fsz)
+            c.drawString(x, y, num_str)
+            x += num_w
+
+        # ── Page number (right-aligned, drawn first to know x position) ─────
+        c.setFillColor(text_col)
+        c.setFont(FONT_REGULAR, fsz)
+        page_w  = c.stringWidth(self._page, FONT_REGULAR, fsz)
+        page_x  = self.width - page_w
+        c.drawString(page_x, y, self._page)
+
+        # ── Title (truncate if it would collide with dots + page number) ────
+        max_title_w = page_x - x - 22   # 22pt reserved for dots
+        title = self._title
+        c.setFont(title_font, fsz)
+        title_w = c.stringWidth(title, title_font, fsz)
+        if title_w > max_title_w:
+            while len(title) > 3 and c.stringWidth(title + "…", title_font, fsz) > max_title_w:
+                title = title[:-1]
+            title = title.rstrip() + "…"
+            title_w = c.stringWidth(title, title_font, fsz)
+        c.setFillColor(text_col)
+        c.drawString(x, y, title)
+
+        # ── Dot leaders ──────────────────────────────────────────────────────
+        dot_x0 = x + title_w + 5
+        dot_x1 = page_x - 5
+        dot_y  = y + fsz * 0.33          # sit slightly above baseline
+        c.setFillColor(HexColor("#C0C0C0"))
+        cx = dot_x0 + self._DOT_R
+        while cx + self._DOT_R < dot_x1:
+            c.circle(cx, dot_y, self._DOT_R, fill=1, stroke=0)
+            cx += self._DOT_GAP
+
+
 # ── Cover + TOC PDF builder ────────────────────────────────────────────────────
 
 def _build_cover_toc_pdf(
@@ -524,98 +622,57 @@ def _build_cover_toc_pdf(
     """
     Render a 2-page PDF: page 1 = cover, page 2 = TOC.
     toc_entries: [(level, title, absolute_final_page_number)]
-    TOC shows h2 entries only (level == 2) for a clean, concise table of contents.
+    Uses _TocEntry flowables with dot leaders for a clean, professional TOC.
     """
     toc_title_style = ParagraphStyle(
         "TocHeading",
         fontName=FONT_BOLD,
-        fontSize=20,
-        leading=26,
+        fontSize=22,
+        leading=28,
         textColor=CHARCOAL,
-        spaceAfter=16,
-    )
-    toc_main_style = ParagraphStyle(
-        "TocMain",
-        fontName=FONT_BOLD,
-        fontSize=11,
-        leading=17,
-        textColor=CHARCOAL,
-        leftIndent=0,
-        spaceAfter=4,
-    )
-    toc_sub_style = ParagraphStyle(
-        "TocSub",
-        fontName=FONT_REGULAR,
-        fontSize=10,
-        leading=15,
-        textColor=GRAY,
-        leftIndent=18,
-        spaceAfter=2,
-    )
-    page_num_style = ParagraphStyle(
-        "TocPage",
-        fontName=FONT_REGULAR,
-        fontSize=11,
-        leading=17,
-        textColor=CHARCOAL,
-        alignment=2,
-    )
-    page_num_sub_style = ParagraphStyle(
-        "TocPageSub",
-        fontName=FONT_REGULAR,
-        fontSize=10,
-        leading=15,
-        textColor=GRAY,
-        alignment=2,
+        spaceAfter=0,
     )
 
-    rows: list[list] = []
+    story: list = [
+        Spacer(1, 1),   # placeholder keeps page 1 alive for cover callback
+        PageBreak(),
+        Spacer(1, 0.70 * inch),
+        Paragraph("Table of Contents", toc_title_style),
+        HRFlowable(width="100%", thickness=2.0, color=YELLOW,
+                   spaceBefore=6, spaceAfter=18),
+    ]
+
     h2_counter = 0
+    prev_was_main = False
 
     for level, entry_title, page in toc_entries:
-        safe = entry_title.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
         if level == 2:
+            # Extra breathing room before each main entry (except the first)
+            if prev_was_main:
+                story.append(Spacer(1, 3))
             h2_counter += 1
-            if len(safe) > 90:
-                safe = safe[:87] + "..."
-            rows.append([
-                Paragraph(f"{h2_counter}. {safe}", toc_main_style),
-                Paragraph(str(page), page_num_style),
-            ])
+            story.append(_TocEntry(
+                num=f"{h2_counter}.",
+                title=entry_title,
+                page=str(page),
+                is_sub=False,
+            ))
+            prev_was_main = True
         elif level == 3:
-            if len(safe) > 85:
-                safe = safe[:82] + "..."
-            rows.append([
-                Paragraph(f"\u2013\u00a0{safe}", toc_sub_style),
-                Paragraph(str(page), page_num_sub_style),
-            ])
+            story.append(_TocEntry(
+                num="",
+                title=entry_title,
+                page=str(page),
+                is_sub=True,
+            ))
+            prev_was_main = False
 
-    if not rows:
-        rows.append([
-            Paragraph("No sections detected", toc_main_style),
-            Paragraph("-", page_num_style),
-        ])
-
-    col_widths = [PAGE_WIDTH - 2 * MARGIN_X - 0.65 * inch, 0.65 * inch]
-    toc_table = Table(rows, colWidths=col_widths, hAlign="LEFT")
-    toc_table.setStyle(TableStyle([
-        ("VALIGN",        (0, 0), (-1, -1), "TOP"),
-        ("ALIGN",         (1, 0), (1, -1), "RIGHT"),
-        ("LEFTPADDING",   (0, 0), (-1, -1), 0),
-        ("RIGHTPADDING",  (0, 0), (-1, -1), 0),
-        ("TOPPADDING",    (0, 0), (-1, -1), 1),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
-    ]))
-
-    story = [
-        Spacer(1, 1),   # placeholder so page 1 exists
-        PageBreak(),
-        Spacer(1, 0.65 * inch),
-        Paragraph("Table of Contents", toc_title_style),
-        HRFlowable(width="100%", thickness=1.5, color=YELLOW,
-                   spaceBefore=4, spaceAfter=14),
-        toc_table,
-    ]
+    if h2_counter == 0:
+        fallback_style = ParagraphStyle(
+            "TocFallback", fontName=FONT_REGULAR, fontSize=11,
+            textColor=GRAY, leading=16,
+        )
+        story.append(Paragraph("No sections detected.", fallback_style))
 
     def _cover_cb(canvas, doc):
         _draw_cover(canvas, doc, title=title)

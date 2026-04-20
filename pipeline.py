@@ -2,6 +2,7 @@
 import asyncio
 import json
 import logging
+import re
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -28,6 +29,22 @@ class PipelineResult:
 log = logging.getLogger(__name__)
 
 _ARTIFACTS = Path("artifacts")
+
+
+def _strip_think_blocks(text: str) -> str:
+    """Remove Perplexity sonar-deep-research chain-of-thought and echoed prompt.
+
+    Perplexity wraps its internal reasoning in <think>...</think> and often
+    echoes the user prompt before the tag. Strip everything up to and including
+    </think>, then strip any remaining blocks.
+    """
+    if "<think>" not in text.lower():
+        return text
+    # Strip echoed prompt + full think block (everything before </think>)
+    text = re.sub(r"^[\s\S]*?</think>\s*", "", text, flags=re.IGNORECASE)
+    # Belt-and-suspenders: remove any remaining <think>…</think> fragments
+    text = re.sub(r"<think>[\s\S]*?</think>", "", text, flags=re.IGNORECASE)
+    return text.strip()
 
 
 async def _emit(on_status, msg: str):
@@ -88,7 +105,12 @@ async def run_research_pipeline(
         result.usage.get("total_tokens", 0),
     )
 
-    word_count = len(result.content.split())
+    # Strip Perplexity chain-of-thought reasoning and echoed prompt prefix
+    research_content = _strip_think_blocks(result.content)
+    if len(research_content) < len(result.content):
+        log.info("Stripped think block: %d → %d chars", len(result.content), len(research_content))
+
+    word_count = len(research_content.split())
     if normalized_mode == "extensive":
         if word_count < 2500:
             log.warning("Output below minimum word count: %d words", word_count)
@@ -98,7 +120,7 @@ async def run_research_pipeline(
     # Step 4 — Verification
     await _emit(on_status, "Verifying claims against sources...")
     log.info("Step 4/7: Running claim verification  issue=%s  citations=%d", issue_id, len(result.citations))
-    verification = await asyncio.to_thread(verify_report, result.content, result.citations)
+    verification = await asyncio.to_thread(verify_report, research_content, result.citations)
     log.info(
         "Step 4/7 complete  issue=%s  summary=%s",
         issue_id,
@@ -110,7 +132,7 @@ async def run_research_pipeline(
     log.info("Step 5/7: Building verified report  issue=%s", issue_id)
     intent = classification.get("intent", "market_research")
     if intent == "code_debug":
-        base_report = result.content
+        base_report = research_content
         log.info("Step 5/7 complete  issue=%s  using raw content (code_debug)", issue_id)
     else:
         base_report = build_verified_report(
@@ -130,7 +152,7 @@ async def run_research_pipeline(
             verification=verification,
             citation_urls=result.citations,
             classification=classification,
-            raw_report=result.content,
+            raw_report=research_content,
         )
         log.info("Step 6/7 complete  issue=%s  digest_chars=%d", issue_id, len(digest))
     except Exception as exc:
